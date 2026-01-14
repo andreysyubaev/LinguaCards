@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/homeFragment"
+        android:title="@string/home"
+        android:icon="@drawable/ic_home_selector"/>
+
+    <item
+        android:id="@+id/cardsFragment"
+        android:title="Cards"
+        android:icon="@drawable/ic_cards_selector"/>
+
+    <item
+        android:id="@+id/packsFragment"
+        android:title="@string/packs"
+        android:icon="@drawable/ic_packs_selector"/>
+
+    <item
+        android:id="@+id/settingsFragment"
+        android:title="@string/settings"
+        android:icon="@drawable/ic_settings_selector"/>
+</menu>

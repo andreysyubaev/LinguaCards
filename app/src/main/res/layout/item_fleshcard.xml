@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Лицевая сторона -->
+    <LinearLayout
+        android:id="@+id/frontSide"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/fleshcard_bg"
+        android:layout_margin="24dp"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvTerm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Term"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            />
+
+    </LinearLayout>
+
+    <!-- Обратная сторона -->
+    <LinearLayout
+        android:id="@+id/backSide"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/fleshcard_bg"
+        android:layout_margin="24dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        >
+
+        <TextView
+            android:id="@+id/tvDefinition"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Definition"
+            android:textSize="22sp"
+            />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
