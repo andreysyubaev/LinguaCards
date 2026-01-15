@@ -42,18 +42,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
+                android:textColor="@color/white"
+                android:hint="Enter term here"
                 />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Term"
+                android:textColor="@color/grey"
                 android:textAllCaps="true"/>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:orientation="vertical">
 
             <EditText
@@ -61,18 +65,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
+                android:textColor="@color/white"
+                android:hint="Enter definition here"
                 />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Definition"
+                android:textColor="@color/grey"
                 android:textAllCaps="true" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:orientation="vertical">
 
             <com.google.android.material.slider.Slider
@@ -88,19 +96,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Difficult"
+                android:textColor="@color/grey"
                 android:textAllCaps="true" />
         </LinearLayout>
 
-
-        <Button
-            android:id="@+id/bAddCard"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="40dp"
-            android:padding="8dp"
-            android:text="Add card"
-            />
-
     </LinearLayout>
+
+    <Button
+        android:id="@+id/bAddCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="24dp"
+        android:text="Create card"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

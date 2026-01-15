@@ -1,10 +1,17 @@
 package com.example.linguacards
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.linguacards.adapters.PackAdapter
+import com.example.linguacards.data.model.AppDataBase
+import kotlinx.coroutines.launch
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -17,43 +24,56 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class packsFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private lateinit var rvPacks: RecyclerView
+    private lateinit var adapter: PackAdapter
+    private lateinit var db: AppDataBase
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
+    ): View {
         return inflater.inflate(R.layout.fragment_packs, container, false)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment packsFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            packsFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        rvPacks = view.findViewById(R.id.rvPacks)
+        db = AppDataBase.getDatabase(requireContext())
+
+        adapter = PackAdapter(
+            packs = emptyList(),
+            packCardDao = db.packCardDao(),
+            lifecycleScope = viewLifecycleOwner.lifecycleScope,
+            onDelete = { pack ->
+                viewLifecycleOwner.lifecycleScope.launch {
+                    db.packDao().delete(pack)
+                    loadPacks()
                 }
+            },
+            onEdit = { pack ->
+                val intent = Intent(requireContext(), editPack::class.java)
+                intent.putExtra("PACK_ID", pack.id)
+                intent.putExtra("PACK_USERID", pack.user_id)
+                intent.putExtra("PACK_NAME", pack.name)
+                intent.putExtra("PACK_CREATEDAT", pack.createdAt)
+                startActivity(intent)
             }
+        )
+
+        rvPacks.layoutManager = LinearLayoutManager(requireContext())
+        rvPacks.adapter = adapter
+
+        loadPacks()
+
+    }
+
+    private fun loadPacks() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            val packs = db.packDao().getAll()
+            adapter.updateList(packs)
+        }
     }
 }

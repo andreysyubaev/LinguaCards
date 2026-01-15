@@ -1,5 +1,6 @@
 package com.example.linguacards
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -46,35 +47,45 @@ class cardsFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_cards, container, false)
         rvCards = view.findViewById(R.id.rvCards)
 
-
-        adapter = CardAdapter(emptyList()) { cardToDelete ->
-            val dialog = androidx.appcompat.app.AlertDialog.Builder(requireContext())
-                .setTitle("Удаление карточки")
-                .setMessage("Вы точно хотите удалить эту карточку?")
-                .setPositiveButton("Да") { _, _ ->
-                    val db = AppDataBase.getDatabase(requireContext())
-                    lifecycleScope.launch {
-                        db.cardDao().delete(cardToDelete)
-                        val updatedList = db.cardDao().getAll()
-                        adapter.updateList(updatedList)
+        adapter = CardAdapter(emptyList(),
+            onDelete = { cardToDelete ->
+                val dialog = androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                    .setTitle("Удаление карточки")
+                    .setMessage("Вы точно хотите удалить эту карточку?")
+                    .setPositiveButton("Да") { _, _ ->
+                        val db = AppDataBase.getDatabase(requireContext())
+                        lifecycleScope.launch {
+                            db.cardDao().delete(cardToDelete)
+                            adapter.updateList(db.cardDao().getAll())
+                        }
                     }
-                }
-                .setNegativeButton("Нет") { dialogInterface, _ ->
-                    dialogInterface.dismiss()
-                }
-                .create()
-
-            dialog.show()
-        }
+                    .setNegativeButton("Нет") { dialogInterface, _ -> dialogInterface.dismiss() }
+                    .create()
+                dialog.show()
+            },
+            onEdit = { cardToEdit ->
+                val intent = Intent(requireContext(), editcard::class.java)
+                intent.putExtra("CARD_ID", cardToEdit.id)
+                intent.putExtra("CARD_TERM", cardToEdit.term)
+                intent.putExtra("CARD_DEFINITION", cardToEdit.definition)
+                intent.putExtra("CARD_EASE", cardToEdit.easeFactor)
+                startActivity(intent)
+            }
+        )
         rvCards.layoutManager = LinearLayoutManager(requireContext())
         rvCards.adapter = adapter
 
         bEdit = view.findViewById(R.id.bEdit)
         bTrash = view.findViewById(R.id.bTrash)
 
-        loadCardsFromDb()
+        onResume()
 
         return view
+    }
+
+    override fun onResume() {
+        super.onResume()
+        loadCardsFromDb()
     }
 
     private fun loadCardsFromDb() {

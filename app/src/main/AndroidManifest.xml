@@ -12,6 +12,21 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LinguaCards">
         <activity
+            android:name=".editPack"
+            android:exported="false" />
+        <activity
+            android:name=".chooseCardForAddInPack"
+            android:exported="false" />
+        <activity
+            android:name=".choosingCardInPack"
+            android:exported="false" />
+        <activity
+            android:name=".addpack"
+            android:exported="false" />
+        <activity
+            android:name=".editcard"
+            android:exported="false" />
+        <activity
             android:name=".result"
             android:exported="false" />
         <activity
@@ -27,6 +42,7 @@
             android:name=".MainScreen"
             android:exported="true"
             android:label="@string/app_name"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.LinguaCards">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

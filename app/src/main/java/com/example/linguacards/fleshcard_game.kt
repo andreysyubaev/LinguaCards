@@ -16,6 +16,9 @@ import kotlinx.coroutines.launch
 import android.view.ViewConfiguration
 import android.widget.Button
 import android.widget.ImageButton
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import com.google.android.material.appbar.MaterialToolbar
 import kotlin.math.abs
 
 class fleshcard_game : AppCompatActivity() {
@@ -24,19 +27,29 @@ class fleshcard_game : AppCompatActivity() {
     private lateinit var notKnowingCount: TextView
     private lateinit var bReturnCard: ImageButton
     private lateinit var bPlaySound: ImageButton
+    private lateinit var topToolbar: MaterialToolbar
+
+    private var totalCards = 0
+    private var currentIndex = 0
+
     private val cards = mutableListOf<Card>()
     private val history = mutableListOf<Triple<Card, View, SwipeDirection>>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_fleshcard_game)
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
 
         cardContainer = findViewById(R.id.cardContainer)
         knowingCount = findViewById(R.id.knowingCount)
         notKnowingCount = findViewById(R.id.notKnowingCount)
         bReturnCard = findViewById(R.id.bReturnCard)
         bPlaySound = findViewById(R.id.bPlaySound)
+        topToolbar = findViewById(R.id.topToolbar)
 
         val db = AppDataBase.getDatabase(this)
         val cardDao = db.cardDao()
@@ -48,6 +61,19 @@ class fleshcard_game : AppCompatActivity() {
 
             showCards()
         }
+
+        lifecycleScope.launch {
+            val dbCards = cardDao.getAll()
+            cards.clear()
+            cards.addAll(dbCards)
+
+            totalCards = cards.size
+            currentIndex = 1
+
+            showCards()
+            updateToolbar()
+        }
+
 
         bReturnCard.setOnClickListener {
             if (history.isNotEmpty()) {
@@ -74,6 +100,10 @@ class fleshcard_game : AppCompatActivity() {
 
                 // добавляем карточку **последней**, чтобы она была поверх всех
                 cardContainer.addView(cardView)
+
+                currentIndex--
+                if (currentIndex < 1) currentIndex = 1
+                updateToolbar()
             } else {
                 Toast.makeText(this, "Нет карточек для возврата", Toast.LENGTH_SHORT).show()
             }
@@ -83,6 +113,7 @@ class fleshcard_game : AppCompatActivity() {
 
         }
     }
+
 
     private fun showCards() {
         cardContainer.removeAllViews()
@@ -155,14 +186,18 @@ class fleshcard_game : AppCompatActivity() {
                 cardView,
                 card,
                 onSwiped = { direction ->
-                    // добавляем карточку в историю до удаления
                     history.add(Triple(card, cardView, direction))
 
                     if (direction == SwipeDirection.RIGHT) incrementKnow()
                     else incrementDontKnow()
 
-                    // удаляем карточку с экрана
                     cardContainer.removeView(cardView)
+
+                    if (currentIndex < totalCards) {
+                        currentIndex++
+                    }
+                    updateToolbar()
+
                     checkIfEmpty()
                 },
                 onNotSwiped = { }
@@ -189,6 +224,10 @@ class fleshcard_game : AppCompatActivity() {
         notKnowingCount.text = (notKnowingCount.text.toString().toInt() - 1).coerceAtLeast(0).toString()
     }
 
+    private fun updateToolbar() {
+        val safeIndex = currentIndex.coerceAtMost(totalCards)
+        topToolbar.title = "$safeIndex / $totalCards"
+    }
 
 
     private fun flipCard(cardView: View) {

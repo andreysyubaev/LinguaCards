@@ -11,8 +11,10 @@ import com.example.linguacards.R
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class CardAdapter(private var cards: List<Card>, private val onDelete: (Card) -> Unit) :
-    RecyclerView.Adapter<CardAdapter.CardViewHolder>() {
+class CardAdapter(private var cards: List<Card>,
+                  private val onDelete: (Card) -> Unit,
+                  private val onEdit: (Card) -> Unit
+    ) : RecyclerView.Adapter<CardAdapter.CardViewHolder>() {
 
     inner class CardViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvTerm: TextView = itemView.findViewById(R.id.tvTerm)
@@ -20,6 +22,7 @@ class CardAdapter(private var cards: List<Card>, private val onDelete: (Card) ->
         val tvDifficult: TextView = itemView.findViewById(R.id.tvDifficult)
         val tvCreatedAt: TextView = itemView.findViewById(R.id.tvCreatedAt)
         val bTrash: ImageButton = itemView.findViewById(R.id.bTrash)
+        val bEdit: ImageButton = itemView.findViewById(R.id.bEdit)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardViewHolder {
@@ -38,9 +41,9 @@ class CardAdapter(private var cards: List<Card>, private val onDelete: (Card) ->
         val formatter = SimpleDateFormat("dd.MM.yy", Locale.getDefault())
         holder.tvCreatedAt.text = formatter.format(card.createdAt)
 
-        holder.bTrash.setOnClickListener {
-            onDelete(card)
-        }
+        holder.bTrash.setOnClickListener { onDelete(card) }
+
+        holder.bEdit.setOnClickListener { onEdit(card) }
     }
 
     override fun getItemCount(): Int = cards.size

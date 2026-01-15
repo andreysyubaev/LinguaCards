@@ -7,12 +7,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import com.example.linguacards.adapters.PackAdapter
+import androidx.viewpager2.widget.ViewPager2
+import com.example.linguacards.adapters.HomePagerAdapter
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
 class HomeFragment : Fragment() {
-    private lateinit var bStart: Button
+
+    private lateinit var packAdapter: PackAdapter
+    private lateinit var viewPager: ViewPager2
+    private lateinit var tabLayout: TabLayout
 
     private var param1: String? = null
     private var param2: String? = null
@@ -32,12 +40,37 @@ class HomeFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
 
         val bStart: Button = view.findViewById(R.id.bStart)
+        viewPager = view.findViewById(R.id.viewPager)
+        tabLayout = view.findViewById(R.id.tabLayout)
+
+
         bStart.setOnClickListener {
             val intent = Intent(requireContext(), fleshcard_game::class.java)
             startActivity(intent)
         }
 
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Сначала создаем и устанавливаем адаптер
+        setupViewPager()
+
+        // Затем привязываем TabLayout
+        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+            tab.text = when(position) {
+                0 -> "All packs"
+                1 -> "Recent"
+                2 -> "Favorites"
+                else -> "Tab $position"
+            }
+        }.attach()
+    }
+
+    private fun setupViewPager() {
+        viewPager.adapter = HomePagerAdapter(this)
     }
 
     companion object {

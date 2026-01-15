@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.LinguaCards" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Theme.LinguaCards" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="android:colorPrimary">@color/primary</item>
+        <item name="android:colorSecondary">@color/secondary</item>
+        <item name="android:button">@color/button</item>
+
     </style>
 </resources>

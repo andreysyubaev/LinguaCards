@@ -17,4 +17,10 @@ interface CardDao {
 
     @Delete
     suspend fun delete(card: Card)
+
+    @Query("UPDATE cards SET term = :term, definition = :definition, easeFactor = :easeFactor WHERE id = :id")
+    suspend fun updateCard(id: Int, term: String, definition: String, easeFactor: Float)
+
+    @Query("SELECT * FROM cards WHERE id IN (:ids)")
+    suspend fun getCardsByIds(ids: List<Int>): List<Card>
 }
