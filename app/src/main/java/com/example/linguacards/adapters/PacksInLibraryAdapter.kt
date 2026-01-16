@@ -1,6 +1,6 @@
 package com.example.linguacards.adapters
 
-import android.app.AlertDialog
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,64 +11,59 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.linguacards.R
 import com.example.linguacards.dao.CardDao
 import com.example.linguacards.dao.PackCardDao
-import com.example.linguacards.data.model.AppDataBase
 import com.example.linguacards.data.model.Pack
+import com.example.linguacards.fleshcard_game
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.Locale
 
-class PackAdapter (private var packs: List<Pack>,
-                   private var packCardDao: PackCardDao,
-                   private var lifecycleScope: LifecycleCoroutineScope,
-                   private val onDelete: (Pack) -> Unit,
-                   private val onEdit: (Pack) -> Unit
-) : RecyclerView.Adapter<PackAdapter.PackViewHolder>() {
-
-
+class PackLibraryAdapter(
+    private var packs: List<Pack>,
+    private val packCardDao: PackCardDao,
+    private val cardDao: CardDao,
+    private val lifecycleScope: LifecycleCoroutineScope,
+    private val onPlayClick: (Pack) -> Unit
+) : RecyclerView.Adapter<PackLibraryAdapter.PackViewHolder>() {
 
     inner class PackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvName: TextView = itemView.findViewById(R.id.tvName)
-        val tvCardsCount: TextView = itemView.findViewById(R.id.tvCardsCount)
         val tvDifficult: TextView = itemView.findViewById(R.id.tvDifficult)
-        val bEdit: ImageButton = itemView.findViewById(R.id.bEdit)
-        val bTrash: ImageButton = itemView.findViewById(R.id.bTrash)
+        val tvCardsCount: TextView = itemView.findViewById(R.id.tvCardsCount)
+        val bPlay: ImageButton = itemView.findViewById(R.id.bPlay)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PackViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_pack, parent, false)
+            .inflate(R.layout.item_pack_in_library, parent, false)
         return PackViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: PackViewHolder, position: Int) {
         val pack = packs[position]
-
         holder.tvName.text = pack.name
 
-        val db = AppDataBase.getDatabase(holder.itemView.context)
-
-        // Количество карточек и средняя сложность
+        // Динамическая сложность и количество карточек
         lifecycleScope.launch {
             val count = packCardDao.getCardsCount(pack.id)
-            holder.tvCardsCount.text = "Cards: $count"
-
             val cardIds = packCardDao.getCardIds(pack.id)
-            val cards = db.cardDao().getCardsByIds(cardIds)
+            val cards = cardDao.getCardsByIds(cardIds)
             val avgEase = if (cards.isNotEmpty()) cards.map { it.easeFactor }.average() else 0.0
+
+            holder.tvCardsCount.text = "Cards: $count"
             holder.tvDifficult.text = "Difficulty: %.2f ★".format(avgEase)
         }
 
-        // Кнопки
-        holder.bTrash.setOnClickListener {
-            AlertDialog.Builder(holder.itemView.context)
-                .setTitle("Удаление набора")
-                .setMessage("Удалить набор?")
-                .setPositiveButton("Да") { _, _ -> onDelete(pack) }
-                .setNegativeButton("Нет", null)
-                .show()
-        }
+        holder.bPlay.setOnClickListener {
+            lifecycleScope.launch {
+                // получаем все карточки этого пака
+                val packCards = packCardDao.getByPackId(pack.id)
+                val cardIds = packCards.map { it.card_id }
+                val cards = cardDao.getCardsByIds(cardIds)  // <-- используем cardDao, который передан в адаптер
 
-        holder.bEdit.setOnClickListener { onEdit(pack) }
+                // запускаем тренировку
+                val intent = Intent(holder.itemView.context, fleshcard_game::class.java)
+                intent.putParcelableArrayListExtra("CARDS", ArrayList(cards))
+                holder.itemView.context.startActivity(intent)
+            }
+        }
     }
 
     override fun getItemCount(): Int = packs.size

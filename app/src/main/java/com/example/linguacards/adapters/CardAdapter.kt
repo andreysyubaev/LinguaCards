@@ -20,7 +20,7 @@ class CardAdapter(private var cards: List<Card>,
         val tvTerm: TextView = itemView.findViewById(R.id.tvTerm)
         val tvDefinition: TextView = itemView.findViewById(R.id.tvDefinition)
         val tvDifficult: TextView = itemView.findViewById(R.id.tvDifficult)
-        val tvCreatedAt: TextView = itemView.findViewById(R.id.tvCreatedAt)
+//        val tvCreatedAt: TextView = itemView.findViewById(R.id.tvCreatedAt)
         val bTrash: ImageButton = itemView.findViewById(R.id.bTrash)
         val bEdit: ImageButton = itemView.findViewById(R.id.bEdit)
     }
@@ -36,10 +36,10 @@ class CardAdapter(private var cards: List<Card>,
         holder.tvTerm.text = card.term
         holder.tvDefinition.text = card.definition
         holder.tvDifficult.text = card.easeFactor.toString() + " ★"
-        holder.tvCreatedAt.text = card.createdAt.toString()
-
-        val formatter = SimpleDateFormat("dd.MM.yy", Locale.getDefault())
-        holder.tvCreatedAt.text = formatter.format(card.createdAt)
+//        holder.tvCreatedAt.text = card.createdAt.toString()
+//
+//        val formatter = SimpleDateFormat("dd.MM.yy", Locale.getDefault())
+//        holder.tvCreatedAt.text = formatter.format(card.createdAt)
 
         holder.bTrash.setOnClickListener { onDelete(card) }
 

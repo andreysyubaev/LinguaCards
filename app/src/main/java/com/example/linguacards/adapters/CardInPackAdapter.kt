@@ -52,11 +52,24 @@ class CardInPackAdapter(
 
     override fun getItemCount(): Int = cards.size
 
+//    fun addCards(newCards: List<Card>) {
+//        cards.addAll(newCards)
+//        notifyDataSetChanged()
+//        onCardsChanged?.invoke(cards) // уведомляем о добавлении
+//    }
+
     fun addCards(newCards: List<Card>) {
-        cards.addAll(newCards)
-        notifyDataSetChanged()
-        onCardsChanged?.invoke(cards) // уведомляем о добавлении
+        val existingIds = cards.map { it.id }.toSet()
+
+        val uniqueNewCards = newCards.filter { it.id !in existingIds }
+
+        if (uniqueNewCards.isNotEmpty()) {
+            cards.addAll(uniqueNewCards)
+            notifyDataSetChanged()
+            onCardsChanged?.invoke(cards)
+        }
     }
+
 
     fun removeCardAt(position: Int) {
         if (position != RecyclerView.NO_POSITION) {

@@ -61,7 +61,7 @@ class HomeFragment : Fragment() {
         // Затем привязываем TabLayout
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             tab.text = when(position) {
-                0 -> "All packs"
+                0 -> "All playable packs"
                 1 -> "Recent"
                 2 -> "Favorites"
                 else -> "Tab $position"

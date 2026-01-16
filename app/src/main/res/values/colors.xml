@@ -11,6 +11,7 @@
     <color name="green">#04C714</color>
     <color name="orange">#C77604</color>
     <color name="red">#ba1a1a</color>
+    <color name="dardpurple">#2e1f52</color>
     <color name="background">#310f5e</color>
     <color name="navigation_menu_background">#20004D</color>
     <color name="accent">#43266D</color>
@@ -18,7 +19,7 @@
     <color name="primary">#68548d</color>
     <color name="on_primary">#ffffff</color>
     <color name="primary_container">#ebdcff</color>
-    <color name="on_primary_container">#503c74</color>
+    <color name="on_primary_container">#2e1f52</color>
 
     <color name="secondary">#635b70</color>
     <color name="on_secondary">#ffffff</color>

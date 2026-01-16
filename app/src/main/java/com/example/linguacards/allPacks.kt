@@ -1,10 +1,22 @@
 package com.example.linguacards
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.linguacards.adapters.PackAdapter
+import com.example.linguacards.adapters.PackLibraryAdapter
+import com.example.linguacards.data.model.AppDataBase
+import com.example.linguacards.data.model.Pack
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -17,6 +29,11 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class allPacks : Fragment() {
+
+    private lateinit var rvPacks: RecyclerView
+    private lateinit var adapter: PackLibraryAdapter
+    private lateinit var db: AppDataBase
+
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -33,9 +50,48 @@ class allPacks : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_all_packs, container, false)
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        db = AppDataBase.getDatabase(requireContext())
+        rvPacks = view.findViewById(R.id.rvPacks)
+        rvPacks.layoutManager = LinearLayoutManager(requireContext())
+
+        lifecycleScope.launch {
+            val packs = db.packDao().getAll()
+            adapter = PackLibraryAdapter(
+                packs,
+                db.packCardDao(),
+                db.cardDao(),
+                viewLifecycleOwner.lifecycleScope
+            ) { pack ->
+                startTraining(pack)
+                Toast.makeText(requireContext(), "Play: ${pack.name}", Toast.LENGTH_SHORT).show()
+            }
+            rvPacks.adapter = adapter
+        }
+    }
+
+    private fun startTraining(pack: Pack) {
+        val db = AppDataBase.getDatabase(requireContext())
+        lifecycleScope.launch {
+            val packCards = db.packCardDao().getByPackId(pack.id)
+            val cardIds = packCards.map { it.card_id }
+            val cards = db.cardDao().getCardsByIds(cardIds)
+
+            // Передаём карточки в Activity тренировки
+            val intent = Intent(requireContext(), fleshcard_game::class.java)
+            intent.putParcelableArrayListExtra("CARDS", ArrayList(cards))
+            startActivity(intent)
+        }
+    }
+
 
     companion object {
         /**

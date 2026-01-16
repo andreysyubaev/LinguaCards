@@ -2,17 +2,25 @@ package com.example.linguacards
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.SearchView
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.linguacards.adapters.CardAdapter
 import com.example.linguacards.data.model.AppDataBase
+import com.example.linguacards.data.model.Card
+import com.google.android.material.search.SearchBar
 import kotlinx.coroutines.launch
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -26,9 +34,15 @@ private const val ARG_PARAM2 = "param2"
  */
 class cardsFragment : Fragment() {
     private lateinit var rvCards: RecyclerView
+    private lateinit var svCards: SearchView
+    private lateinit var bAddCard: ImageButton
     private lateinit var adapter: CardAdapter
     private lateinit var bEdit: ImageButton
     private lateinit var bTrash: ImageButton
+    private lateinit var db: AppDataBase
+
+    private var currentQuery: String = ""
+    private var allCards = listOf<Card>()
     private var param1: String? = null
     private var param2: String? = null
 
@@ -38,6 +52,7 @@ class cardsFragment : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+        db = AppDataBase.getDatabase(requireContext())
     }
 
     override fun onCreateView(
@@ -45,23 +60,27 @@ class cardsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_cards, container, false)
-        rvCards = view.findViewById(R.id.rvCards)
 
+        rvCards = view.findViewById(R.id.rvCards)
+        svCards = view.findViewById(R.id.svCards)
+        bAddCard = view.findViewById(R.id.bAddCard)
+
+        rvCards.layoutManager = LinearLayoutManager(requireContext())
+
+        // Изначально создаём адаптер с пустым списком
         adapter = CardAdapter(emptyList(),
             onDelete = { cardToDelete ->
-                val dialog = androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                androidx.appcompat.app.AlertDialog.Builder(requireContext())
                     .setTitle("Удаление карточки")
                     .setMessage("Вы точно хотите удалить эту карточку?")
                     .setPositiveButton("Да") { _, _ ->
-                        val db = AppDataBase.getDatabase(requireContext())
                         lifecycleScope.launch {
                             db.cardDao().delete(cardToDelete)
-                            adapter.updateList(db.cardDao().getAll())
+                            loadCardsFromDb()
                         }
                     }
                     .setNegativeButton("Нет") { dialogInterface, _ -> dialogInterface.dismiss() }
-                    .create()
-                dialog.show()
+                    .show()
             },
             onEdit = { cardToEdit ->
                 val intent = Intent(requireContext(), editcard::class.java)
@@ -72,13 +91,36 @@ class cardsFragment : Fragment() {
                 startActivity(intent)
             }
         )
-        rvCards.layoutManager = LinearLayoutManager(requireContext())
         rvCards.adapter = adapter
 
-        bEdit = view.findViewById(R.id.bEdit)
-        bTrash = view.findViewById(R.id.bTrash)
+        svCards.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                currentQuery = query.orEmpty()
+                applyFilter()
+                return true
+            }
 
-        onResume()
+            override fun onQueryTextChange(newText: String?): Boolean {
+                currentQuery = newText.orEmpty()
+                applyFilter()
+                return true
+            }
+        })
+
+        svCards.setOnQueryTextFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                svCards.isIconified = true
+            } else {
+                svCards.isIconified = false
+            }
+        }
+
+        bAddCard.setOnClickListener {
+            val intent = Intent(requireContext(), addCard::class.java)
+            startActivity(intent)
+        }
+
+        loadCardsFromDb()
 
         return view
     }
@@ -89,13 +131,29 @@ class cardsFragment : Fragment() {
     }
 
     private fun loadCardsFromDb() {
-        val db = AppDataBase.getDatabase(requireContext())
-        val cardDao = db.cardDao()
-
         lifecycleScope.launch {
-            val cards = cardDao.getAll()
-            adapter.updateList(cards)
+            allCards = db.cardDao().getAll()
+            applyFilter()
         }
+    }
+
+    private fun filterCards(query: String) {
+        val filtered = allCards.filter {
+            it.term.contains(query, ignoreCase = true)
+        }
+        adapter.updateList(filtered)
+    }
+
+    private fun applyFilter() {
+        val filtered = if (currentQuery.isBlank()) {
+            allCards
+        } else {
+            allCards.filter { card ->
+                card.term.contains(currentQuery, ignoreCase = true) ||
+                        card.definition.contains(currentQuery, ignoreCase = true)
+            }
+        }
+        adapter.updateList(filtered)
     }
 
     companion object {

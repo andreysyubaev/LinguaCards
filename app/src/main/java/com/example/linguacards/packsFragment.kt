@@ -6,11 +6,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
+import android.widget.SearchView
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.linguacards.adapters.PackAdapter
 import com.example.linguacards.data.model.AppDataBase
+import com.example.linguacards.data.model.Card
+import com.example.linguacards.data.model.Pack
 import kotlinx.coroutines.launch
 
 // TODO: Rename parameter arguments, choose names that match
@@ -26,8 +30,13 @@ private const val ARG_PARAM2 = "param2"
 class packsFragment : Fragment() {
 
     private lateinit var rvPacks: RecyclerView
+    private lateinit var svPacks: SearchView
+    private lateinit var bAddPack: ImageButton
     private lateinit var adapter: PackAdapter
     private lateinit var db: AppDataBase
+
+    private var currentQuery: String = ""
+    private var allPacks = listOf<Pack>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,6 +50,8 @@ class packsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         rvPacks = view.findViewById(R.id.rvPacks)
+        svPacks = view.findViewById(R.id.svPacks)
+        bAddPack = view.findViewById(R.id.bAddPack)
         db = AppDataBase.getDatabase(requireContext())
 
         adapter = PackAdapter(
@@ -66,14 +77,59 @@ class packsFragment : Fragment() {
         rvPacks.layoutManager = LinearLayoutManager(requireContext())
         rvPacks.adapter = adapter
 
-        loadPacks()
+        svPacks.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                currentQuery = query.orEmpty()
+                applyFilter()
+                return true
+            }
 
+            override fun onQueryTextChange(newText: String?): Boolean {
+                currentQuery = newText.orEmpty()
+                applyFilter()
+                return true
+            }
+        })
+
+        svPacks.setOnQueryTextFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                svPacks.isIconified = true
+            } else {
+                svPacks.isIconified = false
+            }
+        }
+
+        bAddPack.setOnClickListener {
+            val intent = Intent(requireContext(), addpack::class.java)
+            startActivity(intent)
+        }
+
+        loadPacks()
     }
+
+    override fun onResume() {
+        super.onResume()
+        loadPacks()
+    }
+
 
     private fun loadPacks() {
         viewLifecycleOwner.lifecycleScope.launch {
-            val packs = db.packDao().getAll()
-            adapter.updateList(packs)
+            allPacks = db.packDao().getAll()
+            applyFilter()
         }
     }
+
+    private fun applyFilter() {
+        val filtered = if (currentQuery.isBlank()) {
+            allPacks
+        } else {
+            allPacks.filter {
+                it.name.contains(currentQuery, ignoreCase = true)
+            }
+        }
+        adapter.updateList(filtered)
+    }
+
+
 }

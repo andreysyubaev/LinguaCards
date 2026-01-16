@@ -54,25 +54,47 @@ class fleshcard_game : AppCompatActivity() {
         val db = AppDataBase.getDatabase(this)
         val cardDao = db.cardDao()
 
-        lifecycleScope.launch {
-            val dbCards = cardDao.getAll()
+        val cardsFromIntent = intent.getParcelableArrayListExtra<Card>("CARDS")
+        if (cardsFromIntent != null) {
             cards.clear()
-            cards.addAll(dbCards)
-
-            showCards()
-        }
-
-        lifecycleScope.launch {
-            val dbCards = cardDao.getAll()
-            cards.clear()
-            cards.addAll(dbCards)
-
+            cards.addAll(cardsFromIntent)
             totalCards = cards.size
             currentIndex = 1
-
             showCards()
             updateToolbar()
+        } else {
+            // если ничего не передали — fallback на все карточки
+            val db = AppDataBase.getDatabase(this)
+            lifecycleScope.launch {
+                val dbCards = db.cardDao().getAll()
+                cards.clear()
+                cards.addAll(dbCards)
+                totalCards = cards.size
+                currentIndex = 1
+                showCards()
+                updateToolbar()
+            }
         }
+
+//        lifecycleScope.launch {
+//            val dbCards = cardDao.getAll()
+//            cards.clear()
+//            cards.addAll(dbCards)
+//
+//            showCards()
+//        }
+//
+//        lifecycleScope.launch {
+//            val dbCards = cardDao.getAll()
+//            cards.clear()
+//            cards.addAll(dbCards)
+//
+//            totalCards = cards.size
+//            currentIndex = 1
+//
+//            showCards()
+//            updateToolbar()
+//        }
 
 
         bReturnCard.setOnClickListener {

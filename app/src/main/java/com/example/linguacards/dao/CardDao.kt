@@ -23,4 +23,7 @@ interface CardDao {
 
     @Query("SELECT * FROM cards WHERE id IN (:ids)")
     suspend fun getCardsByIds(ids: List<Int>): List<Card>
+
+    @Query("SELECT * FROM cards WHERE term LIKE :query")
+    suspend fun searchByTerm(query: String): List<Card>
 }

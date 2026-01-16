@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import com.example.linguacards.data.model.Card
 import com.example.linguacards.data.model.Pack
 
 @Dao
@@ -29,4 +30,7 @@ interface PackDao {
 
     @Query("SELECT * FROM packs WHERE id = :id LIMIT 1")
     suspend fun getById(id: Int): Pack?
+
+    @Query("SELECT * FROM packs WHERE name LIKE :query")
+    suspend fun searchByName(query: String): List<Pack>
 }

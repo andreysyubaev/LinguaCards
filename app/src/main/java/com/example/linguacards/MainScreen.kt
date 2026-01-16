@@ -16,32 +16,32 @@ class MainScreen : AppCompatActivity() {
         setContentView(R.layout.activity_main_screen)
         val navMenuBtn = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         val controller = findNavController(R.id.fragmentContainerView)
-        val fabAddCard: FloatingActionButton = findViewById(R.id.fabAddCard)
-        val fabAddPack: FloatingActionButton = findViewById(R.id.fabAddPack)
+//        val fabAddCard: FloatingActionButton = findViewById(R.id.fabAddCard)
+//        val fabAddPack: FloatingActionButton = findViewById(R.id.fabAddPack)
         navMenuBtn.setupWithNavController(controller)
 
-        controller.addOnDestinationChangedListener { _, destination, arguments ->
-            when (destination.id) {
-                R.id.cardsFragment -> fabAddCard.show()
-                else -> fabAddCard.hide()
-            }
-        }
+//        controller.addOnDestinationChangedListener { _, destination, arguments ->
+//            when (destination.id) {
+//                R.id.cardsFragment -> fabAddCard.show()
+//                else -> fabAddCard.hide()
+//            }
+//        }
+//
+//        controller.addOnDestinationChangedListener { _, destination, arguments ->
+//            when (destination.id) {
+//                R.id.packsFragment -> fabAddPack.show()
+//                else -> fabAddPack.hide()
+//            }
+//        }
 
-        controller.addOnDestinationChangedListener { _, destination, arguments ->
-            when (destination.id) {
-                R.id.packsFragment -> fabAddPack.show()
-                else -> fabAddPack.hide()
-            }
-        }
-
-        fabAddCard.setOnClickListener {
-            val intent = Intent(this, addCard::class.java)
-            startActivity(intent)
-        }
-
-        fabAddPack.setOnClickListener {
-            val intent = Intent(this, addpack::class.java)
-            startActivity(intent)
-        }
+//        fabAddCard.setOnClickListener {
+//            val intent = Intent(this, addCard::class.java)
+//            startActivity(intent)
+//        }
+//
+//        fabAddPack.setOnClickListener {
+//            val intent = Intent(this, addpack::class.java)
+//            startActivity(intent)
+//        }
     }
 }
