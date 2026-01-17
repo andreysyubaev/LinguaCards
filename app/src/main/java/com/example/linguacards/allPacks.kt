@@ -65,8 +65,15 @@ class allPacks : Fragment() {
 
         lifecycleScope.launch {
             val packs = db.packDao().getAll()
+
+            // фильтруем паки с 0 карт
+            val nonEmptyPacks = packs.filter { pack ->
+                val cardsInPack = db.packCardDao().getByPackId(pack.id)
+                cardsInPack.isNotEmpty()
+            }
+
             adapter = PackLibraryAdapter(
-                packs,
+                nonEmptyPacks,
                 db.packCardDao(),
                 db.cardDao(),
                 viewLifecycleOwner.lifecycleScope
@@ -76,6 +83,7 @@ class allPacks : Fragment() {
             }
             rvPacks.adapter = adapter
         }
+
     }
 
     private fun startTraining(pack: Pack) {

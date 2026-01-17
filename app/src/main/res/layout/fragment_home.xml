@@ -13,7 +13,6 @@
         android:layout_height="wrap_content"
         android:paddingHorizontal="24dp"
         android:layout_marginTop="16dp"
-        android:gravity="center_vertical"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,12 +25,13 @@
             android:gravity="center_vertical"
             android:text="Library"
             android:textColor="@color/white"
-            android:textSize="32sp"
+            android:textSize="40sp"
             android:textStyle="bold" />
 
         <androidx.cardview.widget.CardView
             android:layout_width="56dp"
             android:layout_height="56dp"
+            android:backgroundTint="@color/primary"
             app:cardBackgroundColor="?attr/colorSurfaceVariant"
             app:cardCornerRadius="56dp"
             app:cardElevation="2dp">
@@ -40,9 +40,10 @@
                 android:id="@+id/ibAvatarPhoto"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_gravity="center"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:scaleType="centerCrop"
-                android:src="@drawable/person128x128" />
+                android:src="@drawable/avatarphoto300x300" />
 
         </androidx.cardview.widget.CardView>
 

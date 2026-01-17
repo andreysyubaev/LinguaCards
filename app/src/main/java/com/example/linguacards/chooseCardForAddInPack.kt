@@ -49,6 +49,7 @@ class chooseCardForAddInPack : AppCompatActivity() {
 
         loadCardsFromDb()
 
+
         bAddCard.setOnClickListener {
             val selectedCards = adapter.getSelectedCards()
             if (selectedCards.isNotEmpty()) {

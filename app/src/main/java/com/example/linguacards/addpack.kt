@@ -85,25 +85,26 @@ class addpack : AppCompatActivity() {
         }
 
         bAddPack.setOnClickListener {
-            val packName = etTitle.text.toString().ifBlank { "Новый набор" }
+            val packName = etTitle.text.toString().ifBlank { "New pack" }
 
             lifecycleScope.launch {
                 val db = AppDataBase.getDatabase(this@addpack)
 
-                // создаём пользователя-заглушку
-                val user = withContext(Dispatchers.IO) { getOrCreateSystemUser(db) }
+                val userId = getCurrentUserId()
+                if (userId == -1) {
+                    finish()
+                    return@launch
+                }
 
-                // создаём пак с именем из поля
                 val packId = withContext(Dispatchers.IO) {
                     db.packDao().insert(
                         Pack(
-                            user_id = user.id,
+                            user_id = userId,
                             name = packName
                         )
                     ).toInt()
                 }
 
-                // добавляем карточки
                 withContext(Dispatchers.IO) {
                     cardInPackAdapter.getCards().forEach { card ->
                         db.packCardDao().insert(
@@ -116,27 +117,16 @@ class addpack : AppCompatActivity() {
                     }
                 }
 
+                Log.d("PACK", "Pack saved id=$packId author=$userId")
                 finish()
-                Log.d("PACK", "Pack saved id=$packId name=$packName")
             }
         }
+
     }
-    private suspend fun getOrCreateSystemUser(db: AppDataBase): User {
-        val username = "system"
 
-        val existing = db.userDao().getByUsername(username)
-        if (existing != null) return existing
-
-        val user = User(
-            username = "system",
-            email = "system@local",
-            password = "system"
-        )
-
-        db.userDao().insert(user)
-
-        // после insert заново получаем (Room сам id проставил)
-        return db.userDao().getByUsername(username)!!
+    private fun getCurrentUserId(): Int {
+        val prefs = getSharedPreferences("auth", MODE_PRIVATE)
+        return prefs.getInt("user_id", -1)
     }
 
     private val chooseCardsLauncher =

@@ -10,10 +10,18 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="16dp"
-        android:background="@drawable/element_bg"
+        android:background="@drawable/element_selector"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/bTrash"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginRight="16dp"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/trash" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -55,7 +63,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="DIFFICULT"
-                    android:textSize="12sp"
+                    android:textSize="16sp"
                     android:textColor="@color/text_secondary"/>
 
             </LinearLayout>
@@ -72,15 +80,9 @@
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_gravity="center_vertical"
-            android:layout_marginRight="16dp"
             android:background="@drawable/edit" />
 
-        <ImageButton
-            android:id="@+id/bTrash"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_gravity="center_vertical"
-            android:background="@drawable/trash" />
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

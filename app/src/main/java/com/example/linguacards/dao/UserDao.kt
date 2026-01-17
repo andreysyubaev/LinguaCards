@@ -8,11 +8,20 @@ import com.example.linguacards.data.model.User
 @Dao
 interface UserDao {
     @Insert
-    suspend fun insert(user: User) // добавление пользователя
-
-    @Query("SELECT * FROM users")
-    suspend fun getAll(): List<User>
+    suspend fun insert(user: User)
 
     @Query("SELECT * FROM users WHERE username = :username LIMIT 1")
     suspend fun getByUsername(username: String): User?
+
+    @Query("SELECT * FROM users WHERE email = :email LIMIT 1")
+    suspend fun getByEmail(email: String): User?
+
+    @Query("UPDATE users SET password = :newPassword WHERE id = :userId")
+    suspend fun updatePassword(userId: Int, newPassword: String)
+
+    @Query("SELECT * FROM users WHERE id = :id")
+    suspend fun getById(id: Int): User?
+
+    @Query("DELETE FROM users WHERE id = :id")
+    suspend fun deleteById(id: Int)
 }

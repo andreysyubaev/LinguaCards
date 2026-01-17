@@ -12,6 +12,21 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LinguaCards">
         <activity
+            android:name=".infoBeforeStart"
+            android:exported="false" />
+        <activity
+            android:name=".profile"
+            android:exported="false" />
+        <activity
+            android:name=".forgotPassword"
+            android:exported="false" />
+        <activity
+            android:name=".register"
+            android:exported="false" />
+        <activity
+            android:name=".MainScreen"
+            android:exported="false" />
+        <activity
             android:name=".editPack"
             android:exported="false" />
         <activity
@@ -39,7 +54,7 @@
             android:name=".choose_pack"
             android:exported="false" />
         <activity
-            android:name=".MainScreen"
+            android:name=".login"
             android:exported="true"
             android:label="@string/app_name"
             android:screenOrientation="portrait"

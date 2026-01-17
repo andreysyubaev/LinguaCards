@@ -114,23 +114,36 @@ class editPack : AppCompatActivity() {
     private fun loadPack() {
         lifecycleScope.launch {
             val pack = withContext(Dispatchers.IO) { db.packDao().getById(packId) }
-            if (pack != null) {
-                etTitle.setText(pack.name)
-                tvCreator.text = "Creator: system" // заглушка
-                tvCreatedAt.text =
-                    "Created at: ${SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(pack.createdAt)}"
+            if (pack == null) return@launch
 
-                // загружаем карточки и статистику через PackCard
-                val packCards = withContext(Dispatchers.IO) { db.packCardDao().getByPackId(packId) }
-                val cards = withContext(Dispatchers.IO) {
-                    packCards.mapNotNull { pc -> db.cardDao().getCardsByIds(listOf(pc.card_id)).firstOrNull() }
-                }
-                cardInPackAdapter.addCards(cards)
+            etTitle.setText(pack.name)
 
-                updateStats()
+            val user = withContext(Dispatchers.IO) {
+                db.userDao().getById(pack.user_id)
             }
+            tvCreator.text = "Creator: ${user?.username ?: "Unknown"}"
+
+            tvCreatedAt.text =
+                "Created at: ${
+                    SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
+                        .format(pack.createdAt)
+                }"
+
+            val packCards = withContext(Dispatchers.IO) {
+                db.packCardDao().getByPackId(packId)
+            }
+
+            val cards = withContext(Dispatchers.IO) {
+                packCards.mapNotNull { pc ->
+                    db.cardDao().getCardsByIds(listOf(pc.card_id)).firstOrNull()
+                }
+            }
+
+            cardInPackAdapter.addCards(cards)
+            updateStats()
         }
     }
+
 
     private fun updateStats() {
         lifecycleScope.launch {

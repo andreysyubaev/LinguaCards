@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageButton
 import com.example.linguacards.adapters.PackAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.example.linguacards.adapters.HomePagerAdapter
@@ -21,6 +22,7 @@ class HomeFragment : Fragment() {
     private lateinit var packAdapter: PackAdapter
     private lateinit var viewPager: ViewPager2
     private lateinit var tabLayout: TabLayout
+    private lateinit var ibAvatarPhoto: ImageButton
 
     private var param1: String? = null
     private var param2: String? = null
@@ -42,10 +44,16 @@ class HomeFragment : Fragment() {
         val bStart: Button = view.findViewById(R.id.bStart)
         viewPager = view.findViewById(R.id.viewPager)
         tabLayout = view.findViewById(R.id.tabLayout)
-
+        ibAvatarPhoto = view.findViewById(R.id.ibAvatarPhoto)
 
         bStart.setOnClickListener {
             val intent = Intent(requireContext(), fleshcard_game::class.java)
+            startActivity(intent)
+            requireActivity().finish()
+        }
+
+        ibAvatarPhoto.setOnClickListener {
+            val intent = Intent(requireContext(), profile::class.java)
             startActivity(intent)
         }
 
@@ -55,15 +63,12 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Сначала создаем и устанавливаем адаптер
         setupViewPager()
 
-        // Затем привязываем TabLayout
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             tab.text = when(position) {
                 0 -> "All playable packs"
-                1 -> "Recent"
-                2 -> "Favorites"
+                1 -> "Favorites"
                 else -> "Tab $position"
             }
         }.attach()
@@ -73,14 +78,4 @@ class HomeFragment : Fragment() {
         viewPager.adapter = HomePagerAdapter(this)
     }
 
-    companion object {
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            HomeFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
 }

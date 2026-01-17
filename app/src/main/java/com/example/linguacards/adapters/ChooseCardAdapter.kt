@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.linguacards.R
@@ -32,6 +33,7 @@ class ChooseCardAdapter(
         val tvDefinition: TextView = itemView.findViewById(R.id.tvDefinition)
         val tvDifficult: TextView = itemView.findViewById(R.id.tvDifficult)
         val cbCardChecked: CheckBox = itemView.findViewById(R.id.cbCardChecked)
+        val container: LinearLayout = itemView.findViewById(R.id.llContainer)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChooseCardViewHolder {
@@ -47,13 +49,33 @@ class ChooseCardAdapter(
         holder.tvDefinition.text = cardItem.definition
         holder.tvDifficult.text = cardItem.easeFactor.toString() + " ★"
 
+        // обновляем состояние чекбокса
         holder.cbCardChecked.setOnCheckedChangeListener(null)
-        holder.cbCardChecked.isChecked = checkedMap[cardItem.id] ?: false
+        val isChecked = checkedMap[cardItem.id] ?: false
+        holder.cbCardChecked.isChecked = isChecked
 
-        holder.cbCardChecked.setOnCheckedChangeListener { _, isChecked ->
-            checkedMap[cardItem.id] = isChecked
-            onCardCheckedChange(cardItem, isChecked)
+        // обновляем выделение item
+        holder.itemView.isSelected = isChecked
+
+        // клик по чекбоксу
+        holder.cbCardChecked.setOnCheckedChangeListener { _, checked ->
+            checkedMap[cardItem.id] = checked
+            holder.itemView.isSelected = checked
+            onCardCheckedChange(cardItem, checked)
         }
+
+        // клик по всему элементу
+        holder.container.setOnClickListener {
+            val newState = !(checkedMap[cardItem.id] ?: false)
+            checkedMap[cardItem.id] = newState
+            holder.cbCardChecked.isChecked = newState
+            holder.container.isSelected = newState  // выделяем фон
+            onCardCheckedChange(cardItem, newState)
+        }
+
+        // синхронизация при биндинге
+        holder.container.isSelected = checkedMap[cardItem.id] ?: false
+
     }
 
     override fun getItemCount(): Int = cards.size

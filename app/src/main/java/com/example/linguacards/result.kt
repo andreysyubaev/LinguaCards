@@ -8,12 +8,15 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.linguacards.data.model.Card
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class result : AppCompatActivity() {
     private lateinit var tvTotalCards: TextView
     private lateinit var tvCardsKnown: TextView
     private lateinit var tvCardsDontKnown: TextView
+    private lateinit var bRestart: Button
     private lateinit var bFinish: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,6 +30,7 @@ class result : AppCompatActivity() {
         tvTotalCards = findViewById(R.id.tvTotalCards)
         tvCardsKnown = findViewById(R.id.tvCardsKnown)
         tvCardsDontKnown = findViewById(R.id.tvCardsDontKnown)
+        bRestart = findViewById(R.id.bRestart)
         bFinish = findViewById(R.id.bFinish)
 
         val total = intent.getIntExtra("TOTAL_CARDS", 0)
@@ -37,8 +41,31 @@ class result : AppCompatActivity() {
         tvCardsKnown.text = known.toString()
         tvCardsDontKnown.text = dontKnow.toString()
 
+        bRestart.setOnClickListener {
+            val cards = intent.getParcelableArrayListExtra<Card>("CARDS")
+
+            val restartIntent = Intent(this, fleshcard_game::class.java)
+
+            MaterialAlertDialogBuilder(this)
+                .setTitle("Restart training this pack?")
+                .setMessage("The training will start again. Are you sure?")
+                .setPositiveButton("Yes") { _, _ ->
+                    restartIntent.putParcelableArrayListExtra("CARDS", cards)
+                    restartIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+
+                    startActivity(restartIntent)
+                    finish()
+                }
+                .setNegativeButton("No", null)
+                .show()
+        }
+
+
         bFinish.setOnClickListener {
-            finish()
+            val intent = Intent(this, MainScreen::class.java)
+            intent.flags =
+                Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
         }
     }
 }

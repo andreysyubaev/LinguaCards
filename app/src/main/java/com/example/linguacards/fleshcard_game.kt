@@ -16,9 +16,11 @@ import kotlinx.coroutines.launch
 import android.view.ViewConfiguration
 import android.widget.Button
 import android.widget.ImageButton
+import androidx.activity.OnBackPressedCallback
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlin.math.abs
 
 class fleshcard_game : AppCompatActivity() {
@@ -26,11 +28,14 @@ class fleshcard_game : AppCompatActivity() {
     private lateinit var knowingCount: TextView
     private lateinit var notKnowingCount: TextView
     private lateinit var bReturnCard: ImageButton
+    private lateinit var bFinish: ImageButton
     private lateinit var bPlaySound: ImageButton
     private lateinit var topToolbar: MaterialToolbar
 
     private var totalCards = 0
     private var currentIndex = 0
+    private var tts: android.speech.tts.TextToSpeech? = null
+
 
     private val cards = mutableListOf<Card>()
     private val history = mutableListOf<Triple<Card, View, SwipeDirection>>()
@@ -44,10 +49,20 @@ class fleshcard_game : AppCompatActivity() {
             insets
         }
 
+        tts = android.speech.tts.TextToSpeech(this) { status ->
+            if (status == android.speech.tts.TextToSpeech.SUCCESS) {
+                tts?.language = java.util.Locale.ENGLISH // можно сменить на любой язык
+            } else {
+                Toast.makeText(this, "TTS initialization failed", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+
         cardContainer = findViewById(R.id.cardContainer)
         knowingCount = findViewById(R.id.knowingCount)
         notKnowingCount = findViewById(R.id.notKnowingCount)
         bReturnCard = findViewById(R.id.bReturnCard)
+        bFinish = findViewById(R.id.bFinish)
         bPlaySound = findViewById(R.id.bPlaySound)
         topToolbar = findViewById(R.id.topToolbar)
 
@@ -76,66 +91,58 @@ class fleshcard_game : AppCompatActivity() {
             }
         }
 
-//        lifecycleScope.launch {
-//            val dbCards = cardDao.getAll()
-//            cards.clear()
-//            cards.addAll(dbCards)
-//
-//            showCards()
-//        }
-//
-//        lifecycleScope.launch {
-//            val dbCards = cardDao.getAll()
-//            cards.clear()
-//            cards.addAll(dbCards)
-//
-//            totalCards = cards.size
-//            currentIndex = 1
-//
-//            showCards()
-//            updateToolbar()
-//        }
-
-
         bReturnCard.setOnClickListener {
             if (history.isNotEmpty()) {
                 val (card, cardView, lastDirection) = history.removeAt(history.lastIndex)
 
-                // откатываем счетчик
                 if (lastDirection == SwipeDirection.RIGHT) decrementKnow()
                 else decrementDontKnow()
 
-                // сбрасываем позицию, прозрачность и поворот
                 cardView.translationX = 0f
                 cardView.translationY = 0f
                 cardView.rotation = 0f
                 cardView.alpha = 1f
 
-                // фронт всегда виден, бек скрыт
                 val front = cardView.findViewById<View>(R.id.frontSide)
                 val back = cardView.findViewById<View>(R.id.backSide)
                 front.visibility = View.VISIBLE
                 back.visibility = View.GONE
 
-                // удаляем, если вдруг он еще есть
                 (cardView.parent as? FrameLayout)?.removeView(cardView)
 
-                // добавляем карточку **последней**, чтобы она была поверх всех
                 cardContainer.addView(cardView)
 
                 currentIndex--
                 if (currentIndex < 1) currentIndex = 1
                 updateToolbar()
             } else {
-                Toast.makeText(this, "Нет карточек для возврата", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "No return cards available", Toast.LENGTH_SHORT).show()
             }
         }
 
-        bPlaySound.setOnClickListener {
-
+        bFinish.setOnClickListener {
+            showExitDialog()
         }
-    }
 
+        bPlaySound.setOnClickListener {
+            val currentCard = cards.getOrNull(currentIndex - 1)
+            if (currentCard != null) {
+                tts?.speak(currentCard.term, android.speech.tts.TextToSpeech.QUEUE_FLUSH, null, null)
+            } else {
+                Toast.makeText(this, "No card selected", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+
+        onBackPressedDispatcher.addCallback(
+            this,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    showExitDialog()
+                }
+            }
+        )
+    }
 
     private fun showCards() {
         cardContainer.removeAllViews()
@@ -143,45 +150,6 @@ class fleshcard_game : AppCompatActivity() {
 
         for (card in cards) {
             addCardToContainer(card)
-//            val cardView = layoutInflater.inflate(R.layout.item_fleshcard, cardContainer, false)
-//
-//            val frontSide = cardView.findViewById<View>(R.id.frontSide)
-//            val backSide = cardView.findViewById<View>(R.id.backSide)
-//            val tvTerm = cardView.findViewById<TextView>(R.id.tvTerm)
-//            val tvDefinition = cardView.findViewById<TextView>(R.id.tvDefinition)
-//
-//            tvTerm.text = card.term
-//            tvDefinition.text = card.definition
-//
-//            // стартовое состояние
-//            frontSide.visibility = View.VISIBLE
-//            backSide.visibility = View.GONE
-//
-//            // обработка клика для переворота
-//            cardView.setOnClickListener {
-//                flipCard(cardView)
-//            }
-//
-//            // обработка свайпа
-//            cardView.setOnTouchListener(
-//                CardTouchListener(
-//                    cardView,
-//                    card,
-//                    onSwiped = { direction ->
-//                        if (direction == SwipeDirection.RIGHT) {
-//                            incrementKnow()
-//                        } else {
-//                            incrementDontKnow()
-//                        }
-//
-//                        cardContainer.removeView(cardView)
-//                        checkIfEmpty()
-//                    },
-//                    onNotSwiped = { }
-//                )
-//            )
-//
-//            cardContainer.addView(cardView)
         }
     }
 
@@ -199,10 +167,8 @@ class fleshcard_game : AppCompatActivity() {
         frontSide.visibility = View.VISIBLE
         backSide.visibility = View.GONE
 
-        // клик для переворота
         cardView.setOnClickListener { flipCard(cardView) }
 
-        // свайп обработчик
         cardView.setOnTouchListener(
             CardTouchListener(
                 cardView,
@@ -226,7 +192,6 @@ class fleshcard_game : AppCompatActivity() {
             )
         )
 
-        // добавляем карточку сверху (чтобы была на виду)
         cardContainer.addView(cardView, 0)
     }
 
@@ -250,7 +215,6 @@ class fleshcard_game : AppCompatActivity() {
         val safeIndex = currentIndex.coerceAtMost(totalCards)
         topToolbar.title = "$safeIndex / $totalCards"
     }
-
 
     private fun flipCard(cardView: View) {
         val front = cardView.findViewById<View>(R.id.frontSide)
@@ -282,13 +246,7 @@ class fleshcard_game : AppCompatActivity() {
 
     private fun checkIfEmpty() {
         if (cardContainer.childCount == 0) {
-            Toast.makeText(this, "Cards end!", Toast.LENGTH_SHORT).show()
-            val intent = Intent(this, result::class.java)
-            intent.putExtra("TOTAL_CARDS", cards.size)
-            intent.putExtra("CARDS_KNOWN", knowingCount.text.toString().toInt())
-            intent.putExtra("CARDS_DONT_KNOWN", notKnowingCount.text.toString().toInt())
-            startActivity(intent)
-            finish()
+            goToResultScreen()
         }
     }
 
@@ -343,7 +301,6 @@ class fleshcard_game : AppCompatActivity() {
                         return true
                     }
 
-                    // Свайп вправо
                     if (dx > cardView.width * 0.25f) {
                         cardView.animate()
                             .translationX(cardView.width.toFloat())
@@ -354,7 +311,6 @@ class fleshcard_game : AppCompatActivity() {
                         return true
                     }
 
-                    // Свайп влево
                     if (dx < -cardView.width * 0.25f) {
                         cardView.animate()
                             .translationX(-cardView.width.toFloat())
@@ -365,7 +321,6 @@ class fleshcard_game : AppCompatActivity() {
                         return true
                     }
 
-                    // Не свайп — возвращаем карту
                     cardView.animate()
                         .translationX(0f)
                         .translationY(0f)
@@ -379,6 +334,36 @@ class fleshcard_game : AppCompatActivity() {
             }
             return false
         }
-
     }
+
+    private fun showExitDialog() {
+        MaterialAlertDialogBuilder(this)
+            .setTitle("Finish training?")
+            .setMessage("The results will be saved. Are you sure?")
+            .setPositiveButton("Yes") { _, _ ->
+                goToResultScreen()
+            }
+            .setNegativeButton("No", null)
+            .show()
+    }
+
+    private fun goToResultScreen() {
+        val intent = Intent(this, result::class.java)
+
+        intent.putExtra("TOTAL_CARDS", cards.size)
+        intent.putExtra("CARDS_KNOWN", knowingCount.text.toString().toInt())
+        intent.putExtra("CARDS_DONT_KNOWN", notKnowingCount.text.toString().toInt())
+
+        intent.putParcelableArrayListExtra("CARDS", ArrayList(cards))
+
+        startActivity(intent)
+        finish()
+    }
+
+    override fun onDestroy() {
+        tts?.stop()
+        tts?.shutdown()
+        super.onDestroy()
+    }
+
 }
