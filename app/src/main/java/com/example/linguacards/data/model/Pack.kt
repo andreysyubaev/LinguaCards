@@ -23,5 +23,6 @@ data class Pack(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val user_id: Int,
     val name: String,
-    val createdAt: Date = Date()
+    val createdAt: Date = Date(),
+    val isFavorite: Boolean = false
 ) : Parcelable

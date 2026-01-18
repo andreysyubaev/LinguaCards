@@ -33,4 +33,7 @@ interface PackDao {
 
     @Query("SELECT * FROM packs WHERE name LIKE :query")
     suspend fun searchByName(query: String): List<Pack>
+
+    @Query("UPDATE packs SET isFavorite = :favorite WHERE id = :id")
+    suspend fun setFavorite(id: Int, favorite: Boolean)
 }

@@ -1,5 +1,6 @@
 package com.example.linguacards
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.SearchView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,6 +18,7 @@ import com.example.linguacards.data.model.AppDataBase
 import com.example.linguacards.data.model.Card
 import com.example.linguacards.data.model.Pack
 import kotlinx.coroutines.launch
+import android.widget.Toast
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -54,22 +57,50 @@ class packsFragment : Fragment() {
         bAddPack = view.findViewById(R.id.bAddPack)
         db = AppDataBase.getDatabase(requireContext())
 
+//        adapter = PackAdapter(
+//            packs = emptyList(),
+//            packCardDao = db.packCardDao(),
+//            lifecycleScope = viewLifecycleOwner.lifecycleScope,
+//            onDelete = { pack ->
+//                viewLifecycleOwner.lifecycleScope.launch {
+//                    db.packDao().delete(pack)
+//                    loadPacks()
+//                }
+//            },
+//            onEdit = { pack ->
+//                val intent = Intent(requireContext(), editPack::class.java)
+//                intent.putExtra("PACK_ID", pack.id)
+//                intent.putExtra("PACK_USERID", pack.user_id)
+//                intent.putExtra("PACK_NAME", pack.name)
+//                intent.putExtra("PACK_CREATEDAT", pack.createdAt)
+//                startActivity(intent)
+//            }
+//        )
+
         adapter = PackAdapter(
             packs = emptyList(),
             packCardDao = db.packCardDao(),
             lifecycleScope = viewLifecycleOwner.lifecycleScope,
+
             onDelete = { pack ->
                 viewLifecycleOwner.lifecycleScope.launch {
                     db.packDao().delete(pack)
                     loadPacks()
                 }
             },
+
             onEdit = { pack ->
                 val intent = Intent(requireContext(), editPack::class.java)
                 intent.putExtra("PACK_ID", pack.id)
                 intent.putExtra("PACK_USERID", pack.user_id)
                 intent.putExtra("PACK_NAME", pack.name)
                 intent.putExtra("PACK_CREATEDAT", pack.createdAt)
+                startActivity(intent)
+            },
+
+            onOpenPack = { pack ->
+                val intent = Intent(requireContext(), infoBeforeStart::class.java)
+                intent.putExtra("pack_id", pack.id)
                 startActivity(intent)
             }
         )
@@ -100,8 +131,22 @@ class packsFragment : Fragment() {
         }
 
         bAddPack.setOnClickListener {
-            val intent = Intent(requireContext(), addpack::class.java)
-            startActivity(intent)
+            viewLifecycleOwner.lifecycleScope.launch {
+
+                val cardsCount = db.cardDao().getCardsCount()
+
+                if (cardsCount < 2) {
+                    Toast.makeText(
+                        requireContext(),
+                        "To create a pack you need at least 2 cards",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return@launch
+                }
+
+                val intent = Intent(requireContext(), addpack::class.java)
+                startActivity(intent)
+            }
         }
 
         loadPacks()
@@ -111,7 +156,6 @@ class packsFragment : Fragment() {
         super.onResume()
         loadPacks()
     }
-
 
     private fun loadPacks() {
         viewLifecycleOwner.lifecycleScope.launch {
@@ -131,5 +175,11 @@ class packsFragment : Fragment() {
         adapter.updateList(filtered)
     }
 
-
+    private val addPackLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            loadPacks()
+        }
+    }
 }

@@ -17,14 +17,14 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class PackAdapter (private var packs: List<Pack>,
-                   private var packCardDao: PackCardDao,
-                   private var lifecycleScope: LifecycleCoroutineScope,
-                   private val onDelete: (Pack) -> Unit,
-                   private val onEdit: (Pack) -> Unit
+class PackAdapter(
+    private var packs: List<Pack>,
+    private var packCardDao: PackCardDao,
+    private var lifecycleScope: LifecycleCoroutineScope,
+    private val onDelete: (Pack) -> Unit,
+    private val onEdit: (Pack) -> Unit,
+    private val onOpenPack: (Pack) -> Unit
 ) : RecyclerView.Adapter<PackAdapter.PackViewHolder>() {
-
-
 
     inner class PackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvName: TextView = itemView.findViewById(R.id.tvName)
@@ -41,13 +41,20 @@ class PackAdapter (private var packs: List<Pack>,
     }
 
     override fun onBindViewHolder(holder: PackViewHolder, position: Int) {
+//        val pack = packs[position]
+//
+//        holder.tvName.text = pack.name
+
         val pack = packs[position]
 
         holder.tvName.text = pack.name
 
+        holder.itemView.setOnClickListener {
+            onOpenPack(pack)
+        }
+
         val db = AppDataBase.getDatabase(holder.itemView.context)
 
-        // Количество карточек и средняя сложность
         lifecycleScope.launch {
             val count = packCardDao.getCardsCount(pack.id)
             holder.tvCardsCount.text = "Cards: $count"
@@ -58,7 +65,6 @@ class PackAdapter (private var packs: List<Pack>,
             holder.tvDifficult.text = "Difficulty: %.2f ★".format(avgEase)
         }
 
-        // Кнопки
         holder.bTrash.setOnClickListener {
             AlertDialog.Builder(holder.itemView.context)
                 .setTitle("Удаление набора")

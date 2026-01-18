@@ -10,7 +10,7 @@ import com.example.linguacards.dao.PackCardDao
 import com.example.linguacards.dao.PackDao
 import com.example.linguacards.dao.UserDao
 
-@Database(entities = [User::class, Card::class, Pack::class, PackCard::class], version = 2)
+@Database(entities = [User::class, Card::class, Pack::class, PackCard::class], version = 3)
 @TypeConverters(Converters::class)
 abstract class AppDataBase : RoomDatabase() {
     abstract fun userDao(): UserDao

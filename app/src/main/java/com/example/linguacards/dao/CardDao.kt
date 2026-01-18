@@ -26,4 +26,7 @@ interface CardDao {
 
     @Query("SELECT * FROM cards WHERE term LIKE :query")
     suspend fun searchByTerm(query: String): List<Card>
+
+    @Query("SELECT COUNT(*) FROM cards")
+    suspend fun getCardsCount(): Int
 }

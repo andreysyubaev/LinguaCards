@@ -13,6 +13,7 @@ import com.example.linguacards.dao.CardDao
 import com.example.linguacards.dao.PackCardDao
 import com.example.linguacards.data.model.Pack
 import com.example.linguacards.fleshcard_game
+import com.example.linguacards.infoBeforeStart
 import kotlinx.coroutines.launch
 
 class PackLibraryAdapter(
@@ -39,6 +40,7 @@ class PackLibraryAdapter(
     override fun onBindViewHolder(holder: PackViewHolder, position: Int) {
         val pack = packs[position]
         holder.tvName.text = pack.name
+        holder.itemView.isSelected = pack.isFavorite
 
         // Динамическая сложность и количество карточек
         lifecycleScope.launch {
@@ -52,17 +54,21 @@ class PackLibraryAdapter(
         }
 
         holder.bPlay.setOnClickListener {
-            lifecycleScope.launch {
-                // получаем все карточки этого пака
-                val packCards = packCardDao.getByPackId(pack.id)
-                val cardIds = packCards.map { it.card_id }
-                val cards = cardDao.getCardsByIds(cardIds)  // <-- используем cardDao, который передан в адаптер
+//            lifecycleScope.launch {
+//                // получаем все карточки этого пака
+//                val packCards = packCardDao.getByPackId(pack.id)
+//                val cardIds = packCards.map { it.card_id }
+//                val cards = cardDao.getCardsByIds(cardIds)  // <-- используем cardDao, который передан в адаптер
+//
+//                // запускаем тренировку
+//                val intent = Intent(holder.itemView.context, fleshcard_game::class.java)
+//                intent.putParcelableArrayListExtra("CARDS", ArrayList(cards))
+//                holder.itemView.context.startActivity(intent)
+//            }
 
-                // запускаем тренировку
-                val intent = Intent(holder.itemView.context, fleshcard_game::class.java)
-                intent.putParcelableArrayListExtra("CARDS", ArrayList(cards))
-                holder.itemView.context.startActivity(intent)
-            }
+            val intent = Intent(holder.itemView.context, infoBeforeStart::class.java)
+            intent.putExtra("pack_id", pack.id)
+            holder.itemView.context.startActivity(intent)
         }
     }
 

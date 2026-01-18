@@ -1,10 +1,18 @@
 package com.example.linguacards
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.linguacards.adapters.PackLibraryAdapter
+import com.example.linguacards.data.model.AppDataBase
+import com.example.linguacards.data.model.Pack
+import kotlinx.coroutines.launch
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -17,6 +25,11 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class favoritePacks : Fragment() {
+
+    private lateinit var rvPacks: RecyclerView
+    private lateinit var adapter: PackLibraryAdapter
+    private lateinit var db: AppDataBase
+
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -33,8 +46,40 @@ class favoritePacks : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_favorite_packs, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        db = AppDataBase.getDatabase(requireContext())
+        rvPacks = view.findViewById(R.id.rvPacks)
+        rvPacks.layoutManager = LinearLayoutManager(requireContext())
+
+        lifecycleScope.launch {
+            val packs = db.packDao().getAll()
+
+            val favoritePacks = packs.filter { pack ->
+                pack.isFavorite && db.packCardDao().getByPackId(pack.id).isNotEmpty()
+            }
+
+            adapter = PackLibraryAdapter(
+                favoritePacks,
+                db.packCardDao(),
+                db.cardDao(),
+                viewLifecycleOwner.lifecycleScope
+            ) { pack ->
+                openPackInfo(pack)
+            }
+
+            rvPacks.adapter = adapter
+        }
+    }
+
+    private fun openPackInfo(pack: Pack) {
+        val intent = Intent(requireContext(), infoBeforeStart::class.java)
+        intent.putExtra("pack_id", pack.id)
+        startActivity(intent)
     }
 
     companion object {

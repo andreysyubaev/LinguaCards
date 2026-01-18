@@ -50,9 +50,6 @@ class allPacks : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_all_packs, container, false)
     }
 
@@ -66,7 +63,6 @@ class allPacks : Fragment() {
         lifecycleScope.launch {
             val packs = db.packDao().getAll()
 
-            // фильтруем паки с 0 карт
             val nonEmptyPacks = packs.filter { pack ->
                 val cardsInPack = db.packCardDao().getByPackId(pack.id)
                 cardsInPack.isNotEmpty()
@@ -78,28 +74,31 @@ class allPacks : Fragment() {
                 db.cardDao(),
                 viewLifecycleOwner.lifecycleScope
             ) { pack ->
-                startTraining(pack)
-                Toast.makeText(requireContext(), "Play: ${pack.name}", Toast.LENGTH_SHORT).show()
+                openPackInfo(pack)
             }
+
             rvPacks.adapter = adapter
         }
-
     }
 
-    private fun startTraining(pack: Pack) {
-        val db = AppDataBase.getDatabase(requireContext())
-        lifecycleScope.launch {
-            val packCards = db.packCardDao().getByPackId(pack.id)
-            val cardIds = packCards.map { it.card_id }
-            val cards = db.cardDao().getCardsByIds(cardIds)
+//    private fun startTraining(pack: Pack) {
+//        val db = AppDataBase.getDatabase(requireContext())
+//        lifecycleScope.launch {
+//            val packCards = db.packCardDao().getByPackId(pack.id)
+//            val cardIds = packCards.map { it.card_id }
+//            val cards = db.cardDao().getCardsByIds(cardIds)
+//
+//            val intent = Intent(requireContext(), fleshcard_game::class.java)
+//            intent.putParcelableArrayListExtra("CARDS", ArrayList(cards))
+//            startActivity(intent)
+//        }
+//    }
 
-            // Передаём карточки в Activity тренировки
-            val intent = Intent(requireContext(), fleshcard_game::class.java)
-            intent.putParcelableArrayListExtra("CARDS", ArrayList(cards))
-            startActivity(intent)
-        }
+    private fun openPackInfo(pack: Pack) {
+        val intent = Intent(requireContext(), infoBeforeStart::class.java)
+        intent.putExtra("pack_id", pack.id)
+        startActivity(intent)
     }
-
 
     companion object {
         /**

@@ -95,7 +95,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Difficult"
+                android:text="Difficulty"
                 android:textColor="@color/grey"
                 android:textAllCaps="true" />
         </LinearLayout>

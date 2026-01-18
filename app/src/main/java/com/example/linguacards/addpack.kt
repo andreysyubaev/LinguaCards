@@ -27,6 +27,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Date
+import android.widget.Toast
 
 class addpack : AppCompatActivity() {
     private lateinit var rvCardsInPack: RecyclerView
@@ -85,41 +86,54 @@ class addpack : AppCompatActivity() {
         }
 
         bAddPack.setOnClickListener {
-            val packName = etTitle.text.toString().ifBlank { "New pack" }
+//            val packName = etTitle.text.toString().ifBlank { "New pack" }
+//
+//            lifecycleScope.launch {
+//                val db = AppDataBase.getDatabase(this@addpack)
+//
+//                val userId = getCurrentUserId()
+//                if (userId == -1) {
+//                    finish()
+//                    return@launch
+//                }
+//
+//                val packId = withContext(Dispatchers.IO) {
+//                    db.packDao().insert(
+//                        Pack(
+//                            user_id = userId,
+//                            name = packName
+//                        )
+//                    ).toInt()
+//                }
+//
+//                withContext(Dispatchers.IO) {
+//                    cardInPackAdapter.getCards().forEach { card ->
+//                        db.packCardDao().insert(
+//                            PackCard(
+//                                pack_id = packId,
+//                                card_id = card.id,
+//                                lastReview = Date()
+//                            )
+//                        )
+//                    }
+//                }
+//
+//                Log.d("PACK", "Pack saved id=$packId author=$userId")
+//                finish()
+//            }
+            val cardsCount = cardInPackAdapter.getCards().size
 
-            lifecycleScope.launch {
-                val db = AppDataBase.getDatabase(this@addpack)
-
-                val userId = getCurrentUserId()
-                if (userId == -1) {
-                    finish()
-                    return@launch
-                }
-
-                val packId = withContext(Dispatchers.IO) {
-                    db.packDao().insert(
-                        Pack(
-                            user_id = userId,
-                            name = packName
-                        )
-                    ).toInt()
-                }
-
-                withContext(Dispatchers.IO) {
-                    cardInPackAdapter.getCards().forEach { card ->
-                        db.packCardDao().insert(
-                            PackCard(
-                                pack_id = packId,
-                                card_id = card.id,
-                                lastReview = Date()
-                            )
-                        )
-                    }
-                }
-
-                Log.d("PACK", "Pack saved id=$packId author=$userId")
-                finish()
+            if (cardsCount < 2) {
+                Toast.makeText(
+                    this,
+                    "To create a pack you need at least 2 cards",
+                    Toast.LENGTH_SHORT
+                ).show()
+                return@setOnClickListener
             }
+
+            val packName = etTitle.text.toString().ifBlank { "New pack" }
+            savePack(packName)
         }
 
     }
@@ -139,5 +153,37 @@ class addpack : AppCompatActivity() {
                 }
             }
         }
+
+    private fun savePack(name: String) {
+        lifecycleScope.launch {
+            val db = AppDataBase.getDatabase(this@addpack)
+            val userId = getCurrentUserId()
+            if (userId == -1) return@launch
+
+            // создаём Pack
+            val pack = Pack(user_id = userId, name = name)
+
+            val packId = withContext(Dispatchers.IO) {
+                db.packDao().insert(pack) // возвращает Long
+            }
+
+            // вставляем все карточки в PackCard
+            withContext(Dispatchers.IO) {
+                cardInPackAdapter.getCards().forEach { card ->
+                    db.packCardDao().insert(
+                        PackCard(
+                            pack_id = packId.toInt(), // PackCard ожидает Int
+                            card_id = card.id,
+                            lastReview = Date()
+                        )
+                    )
+                }
+            }
+
+            // возвращаем результат во Fragment
+            setResult(Activity.RESULT_OK)
+            finish()
+        }
+    }
 
 }
