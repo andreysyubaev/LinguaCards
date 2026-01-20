@@ -32,5 +32,4 @@ interface PackCardDao {
 
     @Query("SELECT * FROM packcard WHERE pack_id = :packId")
     suspend fun getByPackId(packId: Int): List<PackCard>
-
 }

@@ -43,7 +43,7 @@
                 android:layout_gravity="center"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:scaleType="centerCrop"
-                android:src="@drawable/avatarphoto300x300" />
+                android:src="@drawable/person128x128" />
 
         </androidx.cardview.widget.CardView>
 

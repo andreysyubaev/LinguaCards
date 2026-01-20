@@ -15,8 +15,8 @@
         android:title="@string/packs"
         android:icon="@drawable/ic_packs_selector"/>
 
-    <item
-        android:id="@+id/settingsFragment"
-        android:title="@string/settings"
-        android:icon="@drawable/ic_settings_selector"/>
+<!--    <item-->
+<!--        android:id="@+id/settingsFragment"-->
+<!--        android:title="@string/settings"-->
+<!--        android:icon="@drawable/ic_settings_selector"/>-->
 </menu>
