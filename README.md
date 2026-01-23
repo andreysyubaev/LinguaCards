@@ -29,12 +29,13 @@ UI: XML, Material Components
 
 Требования к системе:
 Android Studio: Hedgehog или новее
-Android SDK: 34
+Min Android SDK: 24
+Android SDK: 36
 Минимальная версия Android: Android 7.0 (API 24)
 
 Версии Gradle:
-Gradle: 8.6
-Android Gradle Plugin: 8.4.0
+Gradle: 8.13
+Android Gradle Plugin: 8.13.2
 Эти версии используются в проекте и рекомендуются для корректной сборки.
 
 Установка и запуск проекта
