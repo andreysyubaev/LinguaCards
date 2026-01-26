@@ -1,24 +1,22 @@
 package com.example.linguacards
 
 import android.os.Bundle
+import android.util.Patterns
+import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.google.android.material.appbar.MaterialToolbar
 import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.launch
-import android.util.Patterns
-import android.widget.Button
-import android.widget.Toast
 import com.example.linguacards.data.model.AppDataBase
-import com.example.linguacards.data.model.User
+import com.google.android.material.appbar.MaterialToolbar
+import kotlinx.coroutines.launch
 
-
-class register : AppCompatActivity() {
+class editProfile : AppCompatActivity() {
 
     private lateinit var etUsername: EditText
     private lateinit var etEmail: EditText
@@ -26,7 +24,7 @@ class register : AppCompatActivity() {
     private lateinit var etConfirmPassword: EditText
     private lateinit var ibVisiblePassword: ImageButton
     private lateinit var ibVisibleConfirmPassword: ImageButton
-    private lateinit var bCreateNewAccount: Button
+    private lateinit var bAccept: Button
 
     private var isPasswordVisible = false
     private var isConfirmPasswordVisible = false
@@ -34,7 +32,7 @@ class register : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_register)
+        setContentView(R.layout.activity_edit_profile)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -53,7 +51,10 @@ class register : AppCompatActivity() {
         etConfirmPassword = findViewById(R.id.etConfirmPassword)
         ibVisiblePassword = findViewById(R.id.ibVisiblePassword)
         ibVisibleConfirmPassword = findViewById(R.id.ibVisibleConfirmPassword)
-        bCreateNewAccount = findViewById(R.id.bCreateNewAccount)
+        bAccept = findViewById(R.id.bAccept)
+
+        etUsername.setText(intent.getStringExtra("username"))
+        etEmail.setText(intent.getStringExtra("email"))
 
         ibVisiblePassword.setOnClickListener {
             isPasswordVisible = !isPasswordVisible
@@ -83,40 +84,69 @@ class register : AppCompatActivity() {
             }
         }
 
-        bCreateNewAccount.setOnClickListener {
-            if (!validateInput()) return@setOnClickListener
-
-            val username = etUsername.text.toString().trim()
-            val email = etEmail.text.toString().trim()
-            val password = etPassword.text.toString()
-
-            lifecycleScope.launch {
-                val db = AppDataBase.getDatabase(this@register)
-                val userDao = db.userDao()
-
-                // Проверка уникальности
-                if (userDao.getByUsername(username) != null) {
-                    toast("Username already exists")
-                    return@launch
-                }
-
-                if (userDao.getByEmail(email) != null) {
-                    toast("Email already registered")
-                    return@launch
-                }
-
-                val user = User(
-                    username = username,
-                    email = email,
-                    password = password // позже захешируем
-                )
-
-                userDao.insert(user)
-
-                toast("Account created")
-                finish()
-            }
+        bAccept.setOnClickListener {
+            saveChanges()
         }
+    }
+
+    private fun saveChanges() {
+        val newUsername = etUsername.text.toString().trim()
+        val newEmail = etEmail.text.toString().trim()
+        val password = etPassword.text.toString()
+        val confirmPassword = etConfirmPassword.text.toString()
+
+        if (newUsername.isBlank() || newEmail.isBlank()) {
+            toast("Username and email cannot be empty")
+            return
+        }
+
+        if (password.isBlank() || confirmPassword.isBlank()) {
+            toast("Enter password to confirm changes")
+            return
+        }
+
+        if (password != confirmPassword) {
+            toast("Passwords do not match")
+            return
+        }
+
+        val userId = getUserId()
+        if (userId == -1) return
+
+        lifecycleScope.launch {
+            val db = AppDataBase.getDatabase(this@editProfile)
+            val user = db.userDao().getById(userId)
+
+            if (user == null) {
+                toast("User not found")
+                return@launch
+            }
+
+            if (user.password != password) {
+                toast("Incorrect password")
+                return@launch
+            }
+
+            db.userDao().update(
+                user.copy(
+                    username = newUsername,
+                    email = newEmail
+                )
+            )
+
+            toast("Profile updated")
+            finish()
+        }
+    }
+
+
+    private fun getUserId(): Int {
+        val prefs = getSharedPreferences("auth", MODE_PRIVATE)
+        return prefs.getInt("user_id", -1)
+    }
+
+    private fun toast(msg: String) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
     }
 
     private fun validateInput(): Boolean {
@@ -148,9 +178,5 @@ class register : AppCompatActivity() {
         }
 
         return true
-    }
-
-    private fun toast(msg: String) {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
     }
 }

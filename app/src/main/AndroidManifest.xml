@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LinguaCards">
         <activity
+            android:name=".editProfile"
+            android:exported="false" />
+        <activity
             android:name=".infoBeforeStart"
             android:exported="false" />
         <activity

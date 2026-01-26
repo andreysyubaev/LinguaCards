@@ -78,7 +78,6 @@ class fleshcard_game : AppCompatActivity() {
             showCards()
             updateToolbar()
         } else {
-            // если ничего не передали — fallback на все карточки
             val db = AppDataBase.getDatabase(this)
             lifecycleScope.launch {
                 val dbCards = db.cardDao().getAll()

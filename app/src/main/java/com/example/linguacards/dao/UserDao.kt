@@ -3,6 +3,7 @@ package com.example.linguacards.dao
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import com.example.linguacards.data.model.User
 
 @Dao
@@ -24,4 +25,7 @@ interface UserDao {
 
     @Query("DELETE FROM users WHERE id = :id")
     suspend fun deleteById(id: Int)
+
+    @Update
+    suspend fun update(user: User)
 }

@@ -178,9 +178,17 @@
         app:layout_constraintTop_toBottomOf="@+id/linearLayout8">
 
         <Button
+            android:id="@+id/bEdit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Edit profile"
+            />
+
+        <Button
             android:id="@+id/bLogout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:backgroundTint="@color/secondary"
             android:text="Log out"
             android:textColor="@color/text_primary"/>

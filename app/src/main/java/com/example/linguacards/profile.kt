@@ -30,6 +30,7 @@ class profile : AppCompatActivity() {
     private lateinit var etEmail: TextView
     private lateinit var etPassword: TextView
     private lateinit var etCreatedAt: TextView
+    private lateinit var bEdit: Button
     private lateinit var bLogout: Button
     private lateinit var bDeleteAccount: Button
 
@@ -62,8 +63,16 @@ class profile : AppCompatActivity() {
         etEmail = findViewById(R.id.etEmail)
         etPassword = findViewById(R.id.etPassword)
         etCreatedAt = findViewById(R.id.etCreatedAt)
+        bEdit = findViewById(R.id.bEdit)
         bLogout = findViewById(R.id.bLogout)
         bDeleteAccount = findViewById(R.id.bDeleteAccount)
+
+        bEdit.setOnClickListener {
+            val intent = Intent(this, editProfile::class.java)
+            intent.putExtra("username", etUsername.text.toString())
+            intent.putExtra("email", etEmail.text.toString())
+            startActivity(intent)
+        }
 
         bLogout.setOnClickListener {
             val prefs = getSharedPreferences("auth", MODE_PRIVATE)
@@ -96,6 +105,11 @@ class profile : AppCompatActivity() {
         }
 
 
+        loadUserProfile()
+    }
+
+    override fun onResume() {
+        super.onResume()
         loadUserProfile()
     }
 
