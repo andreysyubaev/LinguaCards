@@ -16,7 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="@drawable/arrow_back"
-        app:title="Editing pack"
+        app:title="@string/editing_pack"
         app:titleCentered="true"
         app:titleTextColor="@color/white" />
 
@@ -40,14 +40,14 @@
                 android:id="@+id/etTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Enter title here"
+                android:hint="@string/enter_title_here"
                 android:textColor="@color/white"
                 android:textSize="18sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Title"
+                android:text="@string/title"
                 android:textAllCaps="true"
                 android:textColor="@color/grey" />
 
@@ -59,37 +59,89 @@
             android:layout_marginTop="8dp"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tvDifficult"
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Difficulty: 0.0 ★"
-                android:textSize="12sp"
-                android:textColor="@color/grey"/>
+                android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/tvCreator"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Creator: user"
-                android:textSize="12sp"
-                android:textColor="@color/grey"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Difficulty:"
+                    android:textSize="12sp"
+                    android:textColor="@color/grey"/>
 
-            <TextView
-                android:id="@+id/tvCreatedAt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Created at: dd.mm.yyyy"
-                android:textSize="12sp"
-                android:textColor="@color/grey"/>
+                <TextView
+                    android:id="@+id/tvDifficult"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" 0.0 ★"
+                    android:textSize="12sp"
+                    android:textColor="@color/grey"/>
 
-            <TextView
-                android:id="@+id/tvLastReview"
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Last review: dd.mm.yyyy"
-                android:textSize="12sp"
-                android:textColor="@color/grey"/>
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/creator"
+                    android:textSize="12sp"
+                    android:textColor="@color/grey"/>
+
+                <TextView
+                    android:id="@+id/tvCreator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" user"
+                    android:textSize="12sp"
+                    android:textColor="@color/grey"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/created_at"
+                    android:textSize="12sp"
+                    android:textColor="@color/grey"/>
+
+                <TextView
+                    android:id="@+id/tvCreatedAt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" dd.mm.yyyy"
+                    android:textSize="12sp"
+                    android:textColor="@color/grey"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/last_review"
+                    android:textSize="12sp"
+                    android:textColor="@color/grey"/>
+
+                <TextView
+                    android:id="@+id/tvLastReview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" dd.mm.yyyy"
+                    android:textSize="12sp"
+                    android:textColor="@color/grey"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -121,7 +173,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="24dp"
-        android:text="Accept"
+        android:text="@string/accept"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

@@ -63,9 +63,9 @@ class addpack : AppCompatActivity() {
 
         cardInPackAdapter = CardInPackAdapter(mutableListOf()) { currentCards ->
             val count = currentCards.size
-            tvCardsCount.text = "Cards count: $count"
+            tvCardsCount.text = " $count"
             val avgEase = if (currentCards.isNotEmpty()) currentCards.map { it.easeFactor }.average() else 0.0
-            tvDifficult.text = "Difficult: %.2f ★".format(avgEase)
+            tvDifficult.text = " %.2f ★".format(avgEase)
         }
 
         rvCardsInPack.layoutManager = LinearLayoutManager(this)
@@ -126,7 +126,7 @@ class addpack : AppCompatActivity() {
             if (cardsCount < 2) {
                 Toast.makeText(
                     this,
-                    "To create a pack you need at least 2 cards",
+                    getString(R.string.to_create_a_pack_you_need),
                     Toast.LENGTH_SHORT
                 ).show()
                 return@setOnClickListener
@@ -160,14 +160,12 @@ class addpack : AppCompatActivity() {
             val userId = getCurrentUserId()
             if (userId == -1) return@launch
 
-            // создаём Pack
             val pack = Pack(user_id = userId, name = name)
 
             val packId = withContext(Dispatchers.IO) {
                 db.packDao().insert(pack) // возвращает Long
             }
 
-            // вставляем все карточки в PackCard
             withContext(Dispatchers.IO) {
                 cardInPackAdapter.getCards().forEach { card ->
                     db.packCardDao().insert(
@@ -180,7 +178,6 @@ class addpack : AppCompatActivity() {
                 }
             }
 
-            // возвращаем результат во Fragment
             setResult(Activity.RESULT_OK)
             finish()
         }

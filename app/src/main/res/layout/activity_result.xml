@@ -15,7 +15,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:title="Result"
+        app:title="@string/result"
         app:titleCentered="true"
         app:titleTextColor="@color/white" />
 
@@ -37,7 +37,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Total cards"
+                android:text="@string/total_cards"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 android:textColor="@color/white"/>
@@ -73,7 +73,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Cards known"
+                android:text="@string/cards_known"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="@color/grey"/>
@@ -109,7 +109,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Cards don't known"
+                android:text="@string/cards_dont_known"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="@color/grey"/>
@@ -153,14 +153,14 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:backgroundTint="@color/secondary"
-            android:text="Restart"
+            android:text="@string/restart"
             android:textColor="@color/text_primary"/>
 
         <Button
             android:id="@+id/bFinish"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Finish" />
+            android:text="@string/finish" />
 
     </LinearLayout>
 

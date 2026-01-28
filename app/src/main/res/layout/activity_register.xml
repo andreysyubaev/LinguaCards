@@ -16,7 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="@drawable/arrow_back"
-        app:title="Register"
+        app:title="@string/register"
         app:titleCentered="true"
         app:titleTextColor="@color/white" />
 
@@ -46,7 +46,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Username"
+                android:text="@string/username"
                 android:textAllCaps="true"
                 android:textColor="@color/text_secondary"
                 android:textSize="12sp" />
@@ -69,7 +69,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Email"
+                android:text="@string/email"
                 android:textAllCaps="true"
                 android:textColor="@color/text_secondary"
                 android:textSize="12sp" />
@@ -107,7 +107,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Password"
+                android:text="@string/password"
                 android:textAllCaps="true"
                 android:textColor="@color/text_secondary"
                 android:textSize="12sp" />
@@ -145,7 +145,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Confirm password"
+                android:text="@string/confirm_password"
                 android:textAllCaps="true"
                 android:textColor="@color/text_secondary"
                 android:textSize="12sp" />
@@ -157,7 +157,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_gravity="center"
-            android:text="Create new account"/>
+            android:text="@string/create_new_account_button"/>
 
     </LinearLayout>
 

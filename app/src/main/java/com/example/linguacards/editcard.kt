@@ -37,7 +37,6 @@ class editcard : AppCompatActivity() {
             finish()
         }
 
-        // Получаем данные карточки
         cardId = intent.getIntExtra("CARD_ID", 0)
         edTerm.setText(intent.getStringExtra("CARD_TERM"))
         edDefinition.setText(intent.getStringExtra("CARD_DEFINITION"))
@@ -52,7 +51,7 @@ class editcard : AppCompatActivity() {
 
             lifecycleScope.launch {
                 db.cardDao().updateCard(cardId, term, definition, ease)
-                finish() // закрываем экран редактирования
+                finish()
             }
         }
     }

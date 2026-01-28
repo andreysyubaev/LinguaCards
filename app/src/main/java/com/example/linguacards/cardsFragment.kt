@@ -67,19 +67,18 @@ class cardsFragment : Fragment() {
 
         rvCards.layoutManager = LinearLayoutManager(requireContext())
 
-        // Изначально создаём адаптер с пустым списком
         adapter = CardAdapter(emptyList(),
             onDelete = { cardToDelete ->
                 androidx.appcompat.app.AlertDialog.Builder(requireContext())
-                    .setTitle("Удаление карточки")
-                    .setMessage("Вы точно хотите удалить эту карточку?")
-                    .setPositiveButton("Да") { _, _ ->
+                    .setTitle(getString(R.string.deleting_card))
+                    .setMessage(getString(R.string.are_you_sure_want_to_delete_this_card))
+                    .setPositiveButton(getString(R.string.yes)) { _, _ ->
                         lifecycleScope.launch {
                             db.cardDao().delete(cardToDelete)
                             loadCardsFromDb()
                         }
                     }
-                    .setNegativeButton("Нет") { dialogInterface, _ -> dialogInterface.dismiss() }
+                    .setNegativeButton(getString(R.string.no)) { dialogInterface, _ -> dialogInterface.dismiss() }
                     .show()
             },
             onEdit = { cardToEdit ->

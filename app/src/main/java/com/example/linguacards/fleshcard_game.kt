@@ -57,7 +57,6 @@ class fleshcard_game : AppCompatActivity() {
             }
         }
 
-
         cardContainer = findViewById(R.id.cardContainer)
         knowingCount = findViewById(R.id.knowingCount)
         notKnowingCount = findViewById(R.id.notKnowingCount)
@@ -115,7 +114,7 @@ class fleshcard_game : AppCompatActivity() {
                 if (currentIndex < 1) currentIndex = 1
                 updateToolbar()
             } else {
-                Toast.makeText(this, "No return cards available", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.no_return_cards_available), Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -128,7 +127,7 @@ class fleshcard_game : AppCompatActivity() {
             if (currentCard != null) {
                 tts?.speak(currentCard.term, android.speech.tts.TextToSpeech.QUEUE_FLUSH, null, null)
             } else {
-                Toast.makeText(this, "No card selected", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.no_card_selected), Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -337,12 +336,12 @@ class fleshcard_game : AppCompatActivity() {
 
     private fun showExitDialog() {
         MaterialAlertDialogBuilder(this)
-            .setTitle("Finish training?")
-            .setMessage("The results will be saved. Are you sure?")
-            .setPositiveButton("Yes") { _, _ ->
+            .setTitle(getString(R.string.finish_training))
+            .setMessage(getString(R.string.the_results_will_be_saved))
+            .setPositiveButton(getString(R.string.yes)) { _, _ ->
                 goToResultScreen()
             }
-            .setNegativeButton("No", null)
+            .setNegativeButton(getString(R.string.no), null)
             .show()
     }
 

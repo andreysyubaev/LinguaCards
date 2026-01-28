@@ -90,17 +90,17 @@ class forgotPassword : AppCompatActivity() {
 
             when {
                 email.isBlank() -> {
-                    etEmail.error = "Email required"
+                    etEmail.error = getString(R.string.email_required)
                     return@setOnClickListener
                 }
 
                 newPassword.length < 6 -> {
-                    etNewPassword.error = "Password must be at least 6 characters"
+                    etNewPassword.error = getString(R.string.password_must_be_at_least)
                     return@setOnClickListener
                 }
 
                 newPassword != confirmPassword -> {
-                    etConfirmPassword.error = "Passwords do not match"
+                    etConfirmPassword.error = getString(R.string.passwords_do_not_match)
                     return@setOnClickListener
                 }
             }
@@ -110,7 +110,7 @@ class forgotPassword : AppCompatActivity() {
                 val user = db.userDao().getByEmail(email)
 
                 if (user == null) {
-                    etEmail.error = "User with this email not found"
+                    etEmail.error = getString(R.string.user_with_this_email_not_found)
                     return@launch
                 }
 
@@ -121,7 +121,7 @@ class forgotPassword : AppCompatActivity() {
 
                 Toast.makeText(
                     this@forgotPassword,
-                    "Password updated successfully",
+                    getString(R.string.password_updated_successfully),
                     Toast.LENGTH_SHORT
                 ).show()
 

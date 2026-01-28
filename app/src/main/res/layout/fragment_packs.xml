@@ -25,7 +25,7 @@
             android:layout_weight="1"
             android:background="@drawable/search_bg"
             android:iconifiedByDefault="false"
-            android:queryHint="Search" />
+            android:queryHint="@string/search" />
 
         <ImageButton
             android:id="@+id/bAddPack"

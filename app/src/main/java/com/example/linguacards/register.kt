@@ -94,26 +94,25 @@ class register : AppCompatActivity() {
                 val db = AppDataBase.getDatabase(this@register)
                 val userDao = db.userDao()
 
-                // Проверка уникальности
                 if (userDao.getByUsername(username) != null) {
-                    toast("Username already exists")
+                    toast(getString(R.string.username_already_exists))
                     return@launch
                 }
 
                 if (userDao.getByEmail(email) != null) {
-                    toast("Email already registered")
+                    toast(getString(R.string.email_already_registered))
                     return@launch
                 }
 
                 val user = User(
                     username = username,
                     email = email,
-                    password = password // позже захешируем
+                    password = password
                 )
 
                 userDao.insert(user)
 
-                toast("Account created")
+                toast(getString(R.string.account_created))
                 finish()
             }
         }
@@ -128,22 +127,22 @@ class register : AppCompatActivity() {
         if (username.isEmpty() || email.isEmpty() ||
             password.isEmpty() || confirmPassword.isEmpty()
         ) {
-            toast("Fill in all fields")
+            toast(getString(R.string.fill_both_fields))
             return false
         }
 
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            toast("Invalid email")
+            toast(getString(R.string.invalid_email))
             return false
         }
 
         if (password.length < 6) {
-            toast("Password must be at least 6 characters")
+            toast(getString(R.string.password_must_be_at_least))
             return false
         }
 
         if (password != confirmPassword) {
-            toast("Passwords do not match")
+            toast(getString(R.string.passwords_do_not_match))
             return false
         }
 

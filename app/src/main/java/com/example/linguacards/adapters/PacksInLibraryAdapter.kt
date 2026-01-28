@@ -49,8 +49,8 @@ class PackLibraryAdapter(
             val cards = cardDao.getCardsByIds(cardIds)
             val avgEase = if (cards.isNotEmpty()) cards.map { it.easeFactor }.average() else 0.0
 
-            holder.tvCardsCount.text = "Cards: $count"
-            holder.tvDifficult.text = "Difficulty: %.2f ★".format(avgEase)
+            holder.tvCardsCount.text = " $count"
+            holder.tvDifficult.text = "%.2f ★".format(avgEase)
         }
 
         holder.bPlay.setOnClickListener {

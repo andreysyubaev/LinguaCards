@@ -67,8 +67,8 @@ class HomeFragment : Fragment() {
 
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             tab.text = when(position) {
-                0 -> "All playable packs"
-                1 -> "Favorites"
+                0 -> getString(R.string.all_playable_packs)
+                1 -> getString(R.string.favorites)
                 else -> "Tab $position"
             }
         }.attach()

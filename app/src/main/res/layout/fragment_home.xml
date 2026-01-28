@@ -23,7 +23,7 @@
             android:layout_height="56dp"
             android:layout_weight="1"
             android:gravity="center_vertical"
-            android:text="Library"
+            android:text="@string/library"
             android:textColor="@color/white"
             android:textSize="40sp"
             android:textStyle="bold" />

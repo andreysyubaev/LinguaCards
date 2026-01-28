@@ -1,11 +1,8 @@
 <resources>
     <string name="app_name">LinguaCards</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="settings">Settings</string>
-    <string name="create">Create</string>
-    <string name="home">Home</string>
-    <string name="packs">Packs</string>
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>
     <string name="sync_header">Sync</string>
@@ -30,4 +27,113 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
     <string name="title_activity_login">LoginActivity</string>
+
+    <string name="login">Login</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="forgot_password">Forgot passoword?</string>
+    <string name="login_button">Login</string>
+    <string name="register_button">Register</string>
+    <string name="register">Register</string>
+    <string name="email">Email</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="create_new_account_button">Create new account</string>
+    <string name="reset_password">Reset password</string>
+    <string name="new_password">New password</string>
+    <string name="reset_password_button">Reset password</string>
+    <string name="library">Library</string>
+    <string name="search">Search</string>
+    <string name="home">Home</string>
+    <string name="cards">Cards</string>
+    <string name="packs">Packs</string>
+    <string name="settings">Settings</string>
+    <string name="create_card">Create card</string>
+    <string name="term">Term</string>
+    <string name="definition">Definition</string>
+    <string name="difficulty">Difficulty</string>
+    <string name="create_card_button">Create card</string>
+    <string name="enter_term_here">Enter term here</string>
+    <string name="enter_definition_here">Enter definition here</string>
+    <string name="create_pack">Create pack</string>
+    <string name="title">Title</string>
+    <string name="enter_title_here">Enter title here</string>
+    <string name="cards_in_pack">Cards:</string>
+    <string name="difficulty_pack">Difficulty:</string>
+    <string name="create_pack_button">Create pack</string>
+    <string name="editing_card">Editing card</string>
+    <string name="accept">Accept</string>
+    <string name="editing_pack">Editing pack</string>
+    <string name="creator">Creator:</string>
+    <string name="created_at">Created at:</string>
+    <string name="last_review">Last review:</string>
+    <string name="editing_profile">Editing profile</string>
+    <string name="choose_cards">Choose cards</string>
+    <string name="pack_information">Pack information</string>
+    <string name="pack_name">Pack name:</string>
+    <string name="add_pack_to_favorites">Add pack to Favorites ★</string>
+    <string name="remove_pack_from_favorites">Remove pack from Favorites</string>
+    <string name="start">Start</string>
+    <string name="profile">Profile</string>
+    <string name="email_address_user">Email address:</string>
+    <string name="password_user">Password:</string>
+    <string name="created_at_user">Created at:</string>
+    <string name="edit_profile_button">Edit profile</string>
+    <string name="log_out_button">Log out</string>
+    <string name="delete_account_button">Delete account</string>
+    <string name="result">Result</string>
+    <string name="total_cards">Total cards</string>
+    <string name="cards_known">Cards known</string>
+    <string name="cards_dont_known">Cards don\'t known</string>
+    <string name="restart">Restart</string>
+    <string name="finish">Finish</string>
+    <string name="language">Language</string>
+
+    <string name="fill_both_fields">Fill both fields</string>
+    <string name="card_added">Card added</string>
+    <string name="to_create_a_pack_you_need">To create a pack you need at least 2 cards</string>
+    <string name="deleting_card">Deleting a card</string>
+    <string name="are_you_sure_want_to_delete_this_card">Are you sure want to delete this card?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="new_pack">New pack</string>
+    <string name="username_and_email_cannot_be_empty">Username and email cannot be empty</string>
+    <string name="enter_password_to_confirm_changes">Enter password to confirm changes</string>
+    <string name="passwords_do_not_match">Passwords do not match</string>
+    <string name="user_not_found">User not found</string>
+    <string name="incorrect_password">Incorrect password</string>
+    <string name="profile_updated">Profile updated</string>
+    <string name="fill_in_all_fields">Fill in all fields</string>
+    <string name="invalid_email">Invalid email</string>
+    <string name="password_must_be_at_least">Password must be at least 6 characters</string>
+    <string name="finish_training">Finish training?</string>
+    <string name="the_results_will_be_saved">The results will be saved. Are you sure?</string>
+    <string name="no_card_selected">No card selected</string>
+    <string name="no_return_cards_available">No return cards available</string>
+    <string name="email_required">Email required</string>
+    <string name="user_with_this_email_not_found">User with this email not found</string>
+    <string name="password_updated_successfully">Password updated successfully</string>
+    <string name="all_playable_packs">All playable packs</string>
+    <string name="favorites">Favorites</string>
+    <string name="wrong_password">Wrong password</string>
+    <string name="enter_login_and_password">Enter login and password</string>
+    <string name="delete_account_question">Delete account?</string>
+    <string name="this_action_cannot_be_undone">This action cannot be undone</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+    <string name="username_already_exists">Username already exists</string>
+    <string name="email_already_registered">Email already registered</string>
+    <string name="account_created">Account created</string>
+    <string name="restart_training_this_pack">Restart training this pack?</string>
+    <string name="training_will_start_again">The training will start again. Are you sure?</string>
+    <string name="language_changed">Language changed</string>
+    <string name="restart_required">To apply changes, restart the application</string>
+    <string name="restart_now">Restart now</string>
+    <string name="later">Later</string>
+    <string name="ok">OK</string>
+
+    <string-array name="languages">
+        <item>English</item>
+        <item>Русский</item>
+    </string-array>
 </resources>
+

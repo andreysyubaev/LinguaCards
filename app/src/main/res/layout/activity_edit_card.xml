@@ -16,7 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="@drawable/arrow_back"
-        app:title="Editing card"
+        app:title="@string/editing_card"
         app:titleCentered="true"
         app:titleTextColor="@color/white" />
 
@@ -47,7 +47,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Term"
+                android:text="@string/term"
                 android:textAllCaps="true"/>
         </LinearLayout>
 
@@ -67,7 +67,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Definition"
+                android:text="@string/definition"
                 android:textAllCaps="true" />
         </LinearLayout>
 
@@ -81,15 +81,15 @@
                 android:id="@+id/sEaseFactor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:valueFrom="0"
+                android:valueFrom="1"
                 android:valueTo="5"
                 android:stepSize="1"
-                android:value="0" />
+                android:value="1" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Difficult"
+                android:text="@string/difficulty"
                 android:textAllCaps="true" />
         </LinearLayout>
 
@@ -100,7 +100,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="24dp"
-        android:text="Accept"
+        android:text="@string/accept"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

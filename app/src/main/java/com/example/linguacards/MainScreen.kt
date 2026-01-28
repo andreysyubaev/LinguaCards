@@ -7,6 +7,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import java.util.Locale
 
 class MainScreen : AppCompatActivity() {
     private val SYSTEM_LOGIN = "system"

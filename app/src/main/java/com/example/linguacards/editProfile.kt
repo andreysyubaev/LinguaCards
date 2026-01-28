@@ -96,20 +96,20 @@ class editProfile : AppCompatActivity() {
         val confirmPassword = etConfirmPassword.text.toString()
 
         if (newUsername.isBlank() || newEmail.isBlank()) {
-            toast("Username and email cannot be empty")
+            toast(getString(R.string.username_and_email_cannot_be_empty))
             return
         }
 
         if (password.isBlank() || confirmPassword.isBlank()) {
-            toast("Enter password to confirm changes")
+            toast(getString(R.string.enter_password_to_confirm_changes))
             return
         }
 
         if (password != confirmPassword) {
-            toast("Passwords do not match")
+            toast(getString(R.string.passwords_do_not_match))
             return
         }
-
+        
         val userId = getUserId()
         if (userId == -1) return
 
@@ -118,12 +118,12 @@ class editProfile : AppCompatActivity() {
             val user = db.userDao().getById(userId)
 
             if (user == null) {
-                toast("User not found")
+                toast(getString(R.string.user_not_found))
                 return@launch
             }
 
             if (user.password != password) {
-                toast("Incorrect password")
+                toast(getString(R.string.incorrect_password))
                 return@launch
             }
 
@@ -134,7 +134,7 @@ class editProfile : AppCompatActivity() {
                 )
             )
 
-            toast("Profile updated")
+            toast(getString(R.string.profile_updated))
             finish()
         }
     }
@@ -158,22 +158,22 @@ class editProfile : AppCompatActivity() {
         if (username.isEmpty() || email.isEmpty() ||
             password.isEmpty() || confirmPassword.isEmpty()
         ) {
-            toast("Fill in all fields")
+            toast(getString(R.string.fill_in_all_fields))
             return false
         }
 
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            toast("Invalid email")
+            toast(getString(R.string.invalid_email))
             return false
         }
 
         if (password.length < 6) {
-            toast("Password must be at least 6 characters")
+            toast(getString(R.string.password_must_be_at_least))
             return false
         }
 
         if (password != confirmPassword) {
-            toast("Passwords do not match")
+            toast(getString(R.string.passwords_do_not_match))
             return false
         }
 

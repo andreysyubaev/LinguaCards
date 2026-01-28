@@ -138,7 +138,7 @@ class packsFragment : Fragment() {
                 if (cardsCount < 2) {
                     Toast.makeText(
                         requireContext(),
-                        "To create a pack you need at least 2 cards",
+                        getString(R.string.to_create_a_pack_you_need),
                         Toast.LENGTH_SHORT
                     ).show()
                     return@launch

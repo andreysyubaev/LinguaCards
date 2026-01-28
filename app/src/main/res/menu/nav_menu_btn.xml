@@ -7,7 +7,7 @@
 
     <item
         android:id="@+id/cardsFragment"
-        android:title="Cards"
+        android:title="@string/cards"
         android:icon="@drawable/ic_cards_selector"/>
 
     <item
@@ -15,8 +15,8 @@
         android:title="@string/packs"
         android:icon="@drawable/ic_packs_selector"/>
 
-<!--    <item-->
-<!--        android:id="@+id/settingsFragment"-->
-<!--        android:title="@string/settings"-->
-<!--        android:icon="@drawable/ic_settings_selector"/>-->
+    <item
+        android:id="@+id/settingsFragment"
+        android:title="@string/settings"
+        android:icon="@drawable/ic_settings_selector"/>
 </menu>

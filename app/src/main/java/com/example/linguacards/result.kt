@@ -47,16 +47,16 @@ class result : AppCompatActivity() {
             val restartIntent = Intent(this, fleshcard_game::class.java)
 
             MaterialAlertDialogBuilder(this)
-                .setTitle("Restart training this pack?")
-                .setMessage("The training will start again. Are you sure?")
-                .setPositiveButton("Yes") { _, _ ->
+                .setTitle(getString(R.string.restart_training_this_pack))
+                .setMessage(getString(R.string.training_will_start_again))
+                .setPositiveButton(getString(R.string.yes)) { _, _ ->
                     restartIntent.putParcelableArrayListExtra("CARDS", cards)
                     restartIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
 
                     startActivity(restartIntent)
                     finish()
                 }
-                .setNegativeButton("No", null)
+                .setNegativeButton(getString(R.string.no), null)
                 .show()
         }
 

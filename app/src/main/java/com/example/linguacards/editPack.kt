@@ -68,7 +68,6 @@ class editPack : AppCompatActivity() {
 
         packId = intent.getIntExtra("PACK_ID", 0)
 
-        // адаптер с callback для обновления статистики
         cardInPackAdapter = CardInPackAdapter(mutableListOf()) { updateStats() }
         rvCardsInPack.layoutManager = LinearLayoutManager(this)
         rvCardsInPack.adapter = cardInPackAdapter
@@ -86,12 +85,10 @@ class editPack : AppCompatActivity() {
 
         bEditPack.setOnClickListener {
             lifecycleScope.launch {
-                val newName = etTitle.text.toString().ifBlank { "Новый набор" }
+                val newName = etTitle.text.toString().ifBlank { getString(R.string.new_pack) }
                 withContext(Dispatchers.IO) {
-                    // обновляем имя через DAO
                     db.packDao().updatePack(packId, newName)
 
-                    // удаляем старые связи и добавляем новые
                     db.packCardDao().deleteByPackId(packId)
                     val now = Date()
                     cardInPackAdapter.getCards().forEach { card ->
@@ -121,10 +118,10 @@ class editPack : AppCompatActivity() {
             val user = withContext(Dispatchers.IO) {
                 db.userDao().getById(pack.user_id)
             }
-            tvCreator.text = "Creator: ${user?.username ?: "Unknown"}"
+            tvCreator.text = " ${user?.username ?: "Unknown"}"
 
             tvCreatedAt.text =
-                "Created at: ${
+                " ${
                     SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
                         .format(pack.createdAt)
                 }"
@@ -150,8 +147,8 @@ class editPack : AppCompatActivity() {
             val packCards = withContext(Dispatchers.IO) { db.packCardDao().getByPackId(packId) }
 
             if (packCards.isEmpty()) {
-                tvDifficult.text = "Difficult: 0.0 ★"
-                tvLastReview.text = "Last review: N/A"
+                tvDifficult.text = " 0.0 ★"
+                tvLastReview.text = " N/A"
                 return@launch
             }
 
@@ -166,8 +163,8 @@ class editPack : AppCompatActivity() {
             // Последний обзор
             val lastReviewTime = packCards.mapNotNull { it.lastReview }.maxOfOrNull { it.time }
 
-            tvDifficult.text = "Difficult: %.2f ★".format(avgEase)
-            tvLastReview.text = "Last review: ${lastReviewTime?.let { Date(it).toLocaleString() } ?: "N/A"}"
+            tvDifficult.text = " %.2f ★".format(avgEase)
+            tvLastReview.text = " ${lastReviewTime?.let { Date(it).toLocaleString() } ?: "N/A"}"
         }
     }
 

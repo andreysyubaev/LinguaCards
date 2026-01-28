@@ -85,9 +85,9 @@ class profile : AppCompatActivity() {
 
         bDeleteAccount.setOnClickListener {
             MaterialAlertDialogBuilder(this)
-                .setTitle("Delete account?")
-                .setMessage("This action cannot be undone")
-                .setPositiveButton("Delete") { _, _ ->
+                .setTitle(getString(R.string.delete_account_question))
+                .setMessage(getString(R.string.this_action_cannot_be_undone))
+                .setPositiveButton(getString(R.string.delete)) { _, _ ->
                     lifecycleScope.launch {
                         val db = AppDataBase.getDatabase(this@profile)
                         db.userDao().deleteById(getUserId())
@@ -100,7 +100,7 @@ class profile : AppCompatActivity() {
                         startActivity(intent)
                     }
                 }
-                .setNegativeButton("Cancel", null)
+                .setNegativeButton(getString(R.string.cancel), null)
                 .show()
         }
 
@@ -120,7 +120,7 @@ class profile : AppCompatActivity() {
         lifecycleScope.launch {
             val db = AppDataBase.getDatabase(this@profile)
             val user = db.userDao().getById(userId) ?: run {
-                toast("User not found")
+                toast(getString(R.string.user_not_found))
                 finish()
                 return@launch
             }

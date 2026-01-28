@@ -84,16 +84,15 @@ class login : AppCompatActivity() {
                 val user = userDao.getByUsername(username)
 
                 if (user == null) {
-                    toast("User not found")
+                    toast(getString(R.string.user_not_found))
                     return@launch
                 }
 
                 if (user.password != password) {
-                    toast("Wrong password")
+                    toast(getString(R.string.wrong_password))
                     return@launch
                 }
 
-                // сохраняем логин
                 saveUserSession(user.id)
 
                 val intent = Intent(this@login, MainScreen::class.java)
@@ -110,7 +109,7 @@ class login : AppCompatActivity() {
 
     private fun validateInput(): Boolean {
         if (etLogin.text.isNullOrBlank() || etPassword.text.isNullOrBlank()) {
-            toast("Enter login and password")
+            toast(getString(R.string.enter_login_and_password))
             return false
         }
         return true

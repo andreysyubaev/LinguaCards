@@ -53,7 +53,7 @@ class addCard : AppCompatActivity() {
             val easeFactor = sEaseFactor.value.toFloat()
 
             if (term.isEmpty() || definition.isEmpty()) {
-                Toast.makeText(this, "Fill both fields", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.fill_both_fields), Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
@@ -64,7 +64,7 @@ class addCard : AppCompatActivity() {
                 edTerm.text.clear()
                 edDefinition.text.clear()
 
-                Toast.makeText(this@addCard, "Card added", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@addCard, getString(R.string.card_added), Toast.LENGTH_SHORT).show()
             }
 
         }

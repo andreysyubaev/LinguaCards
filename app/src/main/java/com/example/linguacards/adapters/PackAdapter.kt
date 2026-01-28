@@ -57,12 +57,12 @@ class PackAdapter(
 
         lifecycleScope.launch {
             val count = packCardDao.getCardsCount(pack.id)
-            holder.tvCardsCount.text = "Cards: $count"
+            holder.tvCardsCount.text = " $count"
 
             val cardIds = packCardDao.getCardIds(pack.id)
             val cards = db.cardDao().getCardsByIds(cardIds)
             val avgEase = if (cards.isNotEmpty()) cards.map { it.easeFactor }.average() else 0.0
-            holder.tvDifficult.text = "Difficulty: %.2f ★".format(avgEase)
+            holder.tvDifficult.text = "%.2f ★".format(avgEase)
         }
 
         holder.bTrash.setOnClickListener {

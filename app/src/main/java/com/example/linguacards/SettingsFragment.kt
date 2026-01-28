@@ -1,59 +1,100 @@
 package com.example.linguacards
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Spinner
+import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.Fragment
+import java.util.Locale
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.LocaleListCompat
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [SettingsFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class SettingsFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
+    ): View {
         return inflater.inflate(R.layout.fragment_settings, container, false)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SettingsFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            SettingsFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+
+
+        val spinner = view.findViewById<Spinner>(R.id.spinnerLanguage)
+
+        val adapter = ArrayAdapter.createFromResource(
+            requireContext(),
+            R.array.languages,
+            android.R.layout.simple_spinner_item
+        )
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinner.adapter = adapter
+
+        // Получаем сохранённый язык
+        val prefs = requireContext().getSharedPreferences("settings", 0)
+        val savedLang = prefs.getString("language", "ru")
+        spinner.setSelection(if (savedLang == "ru") 1 else 0, false)
+
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                val lang = when (position) {
+                    0 -> "en"
+                    1 -> "ru"
+                    else -> return
                 }
+
+                val prefs = requireContext().getSharedPreferences("settings", 0)
+                val savedLang = prefs.getString("language", "ru")
+
+                // чтобы не пересоздавать экран без надобности
+                if (lang == savedLang) return
+
+                prefs.edit().putString("language", lang).apply()
+
+                LocaleHelper.setLocale(requireContext(), lang)
+
+                val appLocale = LocaleListCompat.forLanguageTags(lang)
+                AppCompatDelegate.setApplicationLocales(appLocale)
+
+//                requireActivity().recreate()
+
+//                AlertDialog.Builder(requireContext())
+//                    .setTitle(getString(R.string.language_changed))
+//                    .setMessage(getString(R.string.restart_required))
+//                    .setCancelable(false)
+//                    .setPositiveButton(getString(R.string.restart_now)) { _, _ ->
+//                        // Полный перезапуск приложения
+//                        val intent = requireActivity().packageManager
+//                            .getLaunchIntentForPackage(requireActivity().packageName)
+//                        intent?.let {
+//                            it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+//                            startActivity(it)
+//                            requireActivity().finish()
+//                        }
+//
+//                    }
+//                    .setNegativeButton(getString(R.string.later), null)
+//                    .show()
+
             }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {}
+
+        }
+
+        Log.d("LANG", Locale.getDefault().language)
     }
 }

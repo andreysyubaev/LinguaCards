@@ -16,7 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="@drawable/arrow_back"
-        app:title="Profile"
+        app:title="@string/profile"
         app:titleCentered="true"
         app:titleTextColor="@color/white" />
 
@@ -90,7 +90,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Email address:"
+                android:text="@string/email_address_user"
                 android:textColor="@color/text_primary"
                 android:textSize="16sp" />
 
@@ -118,7 +118,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Password:"
+                android:text="@string/password_user"
                 android:textColor="@color/text_primary"
                 android:textSize="16sp" />
 
@@ -146,7 +146,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Created at:"
+                android:text="@string/created_at"
                 android:textColor="@color/text_primary"
                 android:textSize="16sp" />
 
@@ -181,7 +181,7 @@
             android:id="@+id/bEdit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Edit profile"
+            android:text="@string/edit_profile_button"
             />
 
         <Button
@@ -190,7 +190,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:backgroundTint="@color/secondary"
-            android:text="Log out"
+            android:text="@string/log_out_button"
             android:textColor="@color/text_primary"/>
 
         <Button
@@ -199,7 +199,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:backgroundTint="@color/red"
-            android:text="Delete account"
+            android:text="@string/delete_account_button"
             android:textColor="@color/text_primary"/>
 
     </LinearLayout>

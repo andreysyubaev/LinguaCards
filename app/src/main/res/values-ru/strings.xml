@@ -1,0 +1,138 @@
+<resources>
+    <string name="app_name">LinguaCards</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome!"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="title_activity_login">LoginActivity</string>
+
+    <string name="login">Вход</string>
+    <string name="username">Имя пользователя</string>
+    <string name="password">Пароль</string>
+    <string name="forgot_password">Забыли пароль?</string>
+    <string name="login_button">Войти</string>
+    <string name="register_button">Зарегистрироваться</string>
+    <string name="register">Регистрация</string>
+    <string name="email">Электронная почта</string>
+    <string name="confirm_password">Подтвердите пароль</string>
+    <string name="create_new_account_button">Создать новый аккаунт</string>
+    <string name="reset_password">Восстановление пароля</string>
+    <string name="new_password">Новый пароль</string>
+    <string name="reset_password_button">Восстановить пароль</string>
+    <string name="library">Библиотека</string>
+    <string name="search">Поиск</string>
+    <string name="home">Главная</string>
+    <string name="cards">Карты</string>
+    <string name="packs">Наборы</string>
+    <string name="settings">Настройки</string>
+    <string name="create_card">Создание карточки</string>
+    <string name="term">Слово</string>
+    <string name="definition">Перевод</string>
+    <string name="difficulty">Сложность</string>
+    <string name="create_card_button">Создать карточку</string>
+    <string name="enter_term_here">Введите слово</string>
+    <string name="enter_definition_here">Введите перевод</string>
+    <string name="create_pack">Создание набора</string>
+    <string name="title">Название</string>
+    <string name="enter_title_here">Введите название</string>
+    <string name="cards_in_pack">Карт:</string>
+    <string name="difficulty_pack">Сложность:</string>
+    <string name="create_pack_button">Создать набор</string>
+    <string name="editing_card">Изменение карточки</string>
+    <string name="accept">Применить</string>
+    <string name="editing_pack">Изминение набора</string>
+    <string name="creator">Автор:</string>
+    <string name="created_at">Дата создания:</string>
+    <string name="last_review">Последнее посещение:</string>
+    <string name="editing_profile">Изменение профиля</string>
+    <string name="choose_cards">Выбор карточек</string>
+    <string name="pack_information">Информация о наборе</string>
+    <string name="pack_name">Название:</string>
+    <string name="add_pack_to_favorites">Добавить набор в избранное ★</string>
+    <string name="remove_pack_from_favorites">Убрать набор из избранного</string>
+    <string name="start">Начать</string>
+    <string name="profile">Профиль</string>
+    <string name="email_address_user">Электронная почта:</string>
+    <string name="password_user">Пароль:</string>
+    <string name="created_at_user">Дата регистрации:</string>
+    <string name="edit_profile_button">Изменить профиль</string>
+    <string name="log_out_button">Выйти из аккаунта</string>
+    <string name="delete_account_button">Удалить аккаунт</string>
+    <string name="result">Результат</string>
+    <string name="total_cards">Всего карточек</string>
+    <string name="cards_known">Известных карточек</string>
+    <string name="cards_dont_known">Неизвестных карточек</string>
+    <string name="restart">Пройти заново</string>
+    <string name="finish">Закончить</string>
+    <string name="language">Язык</string>
+
+    <string name="fill_both_fields">Заполните оба поля</string>
+    <string name="card_added">Карточка добавлена</string>
+    <string name="to_create_a_pack_you_need">Для создания набора требуется минимум 2 карточки</string>
+    <string name="deleting_card">Удаление карточки</string>
+    <string name="are_you_sure_want_to_delete_this_card">Вы уверены, что хотите удалить эту карту?</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
+    <string name="new_pack">Новый набор</string>
+    <string name="username_and_email_cannot_be_empty">Имя пользователя и электронная почта не могут быть пустыми</string>
+    <string name="enter_password_to_confirm_changes">Введите пароль для подтверждения изменений</string>
+    <string name="passwords_do_not_match">Пароли не совпадают</string>
+    <string name="user_not_found">Пользователь не найден</string>
+    <string name="incorrect_password">Неверный пароль</string>
+    <string name="profile_updated">Профиль обновлен</string>
+    <string name="fill_in_all_fields">Заполните все поля</string>
+    <string name="invalid_email">Неверный адрес электронной почты</string>
+    <string name="password_must_be_at_least">Пароль должен состоять как минимум из 6 символов</string>
+    <string name="finish_training">Закончить тренировку?</string>
+    <string name="the_results_will_be_saved">Результаты будут сохранены. Вы уверены?</string>
+    <string name="no_card_selected">Карта не выбрана</string>
+    <string name="no_return_cards_available">Нет карточек для возврата</string>
+    <string name="email_required">Требуется адрес электронной почты</string>
+    <string name="user_with_this_email_not_found">Пользователь с данным адресом электронной почты не найден</string>
+    <string name="password_updated_successfully">Пароль успешно обновлен</string>
+    <string name="all_playable_packs">Все доступные наборы</string>
+    <string name="favorites">Избранное</string>
+    <string name="wrong_password">Неверный пароль</string>
+    <string name="enter_login_and_password">Введите логин и пароль</string>
+    <string name="delete_account_question">Удалить аккаунт?</string>
+    <string name="this_action_cannot_be_undone">Это действие необратимо</string>
+    <string name="delete">Удалить</string>
+    <string name="cancel">Отменить</string>
+    <string name="username_already_exists">Имя пользователя уже существует</string>
+    <string name="email_already_registered">Адрес электронной почты уже зарегистрирован</string>
+    <string name="account_created">Аккаунт создан</string>
+    <string name="restart_training_this_pack">Перезапустить тренировку этого набора?</string>
+    <string name="training_will_start_again">Тренировка начнется заново. Вы уверены?</string>
+    <string name="language_changed">Язык изменен</string>
+    <string name="restart_required">Для применения изменений требуется перезапуск приложения</string>
+    <string name="restart_now">Перезапустить сейчас</string>
+    <string name="later">Потом</string>
+    <string name="ok">Хорошо</string>
+
+    <string-array name="languages">
+        <item>Английский</item>
+        <item>Русский</item>
+    </string-array>
+</resources>

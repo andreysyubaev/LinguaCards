@@ -72,7 +72,7 @@ class infoBeforeStart : AppCompatActivity() {
                     db.packDao().setFavorite(p.id, newState)
                     pack = p.copy(isFavorite = newState)
 
-                    bFavorite.text = if (newState) "Remove from Favorites" else "Add to Favorites"
+                    bFavorite.text = if (newState) getString(R.string.remove_pack_from_favorites) else getString(R.string.add_pack_to_favorites)
                 }
             }
         }
@@ -109,7 +109,7 @@ class infoBeforeStart : AppCompatActivity() {
 
             cardInPackInfoAdapter.setCards(cards)
 
-            bFavorite.text = if (p.isFavorite) "Remove pack from Favorites" else "Add pack to Favorites ★"
+            bFavorite.text = if (p.isFavorite) getString(R.string.remove_pack_from_favorites) else getString(R.string.add_pack_to_favorites)
         }
 
         bStart.setOnClickListener {
