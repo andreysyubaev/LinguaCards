@@ -42,7 +42,6 @@ class PackLibraryAdapter(
         holder.tvName.text = pack.name
         holder.itemView.isSelected = pack.isFavorite
 
-        // Динамическая сложность и количество карточек
         lifecycleScope.launch {
             val count = packCardDao.getCardsCount(pack.id)
             val cardIds = packCardDao.getCardIds(pack.id)

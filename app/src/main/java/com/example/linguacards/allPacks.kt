@@ -63,13 +63,13 @@ class allPacks : Fragment() {
         lifecycleScope.launch {
             val packs = db.packDao().getAll()
 
-            val nonEmptyPacks = packs.filter { pack ->
+            val validPacks = packs.filter { pack ->
                 val cardsInPack = db.packCardDao().getByPackId(pack.id)
-                cardsInPack.isNotEmpty()
+                cardsInPack.size >= 2
             }
 
             adapter = PackLibraryAdapter(
-                nonEmptyPacks,
+                validPacks,
                 db.packCardDao(),
                 db.cardDao(),
                 viewLifecycleOwner.lifecycleScope
